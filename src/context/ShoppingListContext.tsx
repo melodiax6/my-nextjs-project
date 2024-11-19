@@ -12,7 +12,7 @@ interface Ingredient {
 interface ShoppingListContextType {
   shoppingList: Ingredient[];
   addToShoppingList: (ingredient: Ingredient) => void;
-  removeFromShoppingList: (id: number) => void;
+  removeFromShoppingList: (id: string) => void;
 }
 
 const ShoppingListContext = createContext<ShoppingListContextType | undefined>(undefined);
@@ -24,7 +24,7 @@ export const ShoppingListProvider = ({ children }: { children: ReactNode }) => {
     setShoppingList((prevList) => [...prevList, ingredient]);
   };
 
-  const removeFromShoppingList = (id: number) => {
+  const removeFromShoppingList = (id: string) => {
     setShoppingList((prevList) => prevList.filter(item => item.id !== id));
   };
 

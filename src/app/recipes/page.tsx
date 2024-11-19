@@ -1,74 +1,85 @@
-'use client'
 
-import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { recipesData } from '../../utils/recipeData';
+import { allRecipes } from '@/lib/contentful/api';
+import { HydrationBoundary } from '@/components/HydrationBoundary';
 
-const Recipes = (props: any) => {
-  const [searchValue, setSearchValue] = useState<string>('');
+export const dynamic = "force-static";
+
+export default async function Recipes() {
+  const data = await allRecipes();
+  
+  if (!data) {
+    return null;
+  }
 
   return (
-    <div className="flex flex-col items-center p-4 bg-gray-50 min-h-screen">
-      {/* Search bar
-      <div className="flex items-center bg-[#FBB5A5] dark:bg-[#FFC8C2] p-2 rounded-full h-12 w-full max-w-lg mb-6">
-        <input
-          type="text"
-          placeholder="Search"
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-          className="bg-transparent border-0 outline-none text-[#3A3967] dark:text-[#9E88E4] text-base placeholder:text-[#3A3967] dark:placeholder:text-[#9E88E4] px-4 flex-grow"
-        />
-      </div> */}
+    <HydrationBoundary fallback={"kos"} >
+    <div className="flex flex-col items-center p-4 bg-gray-50 min-h-screen font-sans">
+      
+      {/* Grid ustawiony na 4 kolumny */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 w-full max-w-6xl">
+        {data.map((recipe, index) => {
+          if (!recipe.fields) {
+            return null;
+          }
 
-      {/* Recipe cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-        {recipesData
-          .filter(recipe => recipe.title.toLowerCase().includes(searchValue))
-          .map((recipe, index) => (
+          // Zmieniony URL obrazka, aby miał większą wysokość (wymuszenie bardziej pionowego formatu)
+          const imageUrl = `https:${recipe.fields.image.fields.file.url}?w=400&h=500&fm=webp&q=75`;
+
+          return (
             <Link
               href={{
-                pathname: `/recipes/${recipe.id}`,
+                pathname: `/recipes/${recipe.fields.id}`,
                 query: { recipe: JSON.stringify(recipe) }
               }}
               passHref
               key={index}
             >
-              <div className="bg-white border border-gray-200 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer transform hover:-translate-y-1 flex flex-col">
-                <div className="relative w-full h-0 pb-[56.25%] rounded-t-xl overflow-hidden"> 
+              <div className="flex flex-col items-start cursor-pointer">
+                
+                {/* Stylizowane zdjęcie z bardziej wydłużonym formatem */}
+                <div className="relative w-full h-60 overflow-hidden rounded-2xl shadow-md">
                   <Image
-                    src={recipe.image}
-                    alt={recipe.title}
+                    src={imageUrl}
+                    alt={recipe.fields.image.fields.title}
                     layout="fill"
-                    objectFit="cover"
-                    className="transition-transform duration-300 hover:scale-105"
+                    className="object-cover transition-transform duration-300 hover:scale-105 rounded-2xl"
                   />
                 </div>
-                <div className="p-4 flex flex-col items-center">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2 text-center">
-                    {recipe.title}
+                
+                {/* Informacje o przepisie pod zdjęciem, przesunięte do lewej strony */}
+                <div className="mt-3 text-left w-full">
+                  <h3 className="text-md font-bold uppercase mb-1" style={{ color: '#3a3967' }}>
+                    {recipe.fields.title}
                   </h3>
-                  <p className="text-sm text-gray-500 mb-4 text-center">
-                    {recipe.time}
+                  <p className="text-xs mb-2 flex items-center" style={{ color: '#3a3967' }}>
+                    <Image
+                      src="/images/clock1.png"
+                      alt="Time Icon"
+                      width={14}
+                      height={14}
+                      className="mr-1"
+                    />
+                    {recipe.fields.time}
                   </p>
+                  {/* Poziom trudności */}
                   <span
-                    className={`inline-block px-3 py-1 text-sm font-medium text-white rounded-full 
-                    ${recipe.difficulty === 'Easy' ? 'bg-green-500' : 
-                      recipe.difficulty === 'Not too tricky' ? 'bg-blue-500' : 
-                      recipe.difficulty === 'Moderate' ? 'bg-orange-500' : 
-                      recipe.difficulty === 'Challenging' ? 'bg-red-500' : 'bg-gray-500'}`}
+                    className={`text-xs font-medium text-white px-2 py-1 rounded-full uppercase
+                      ${recipe.fields.difficulty === 'Easy' ? 'bg-green-500' : 
+                        recipe.fields.difficulty === 'Not too tricky' ? 'bg-blue-500' : 
+                        recipe.fields.difficulty === 'Moderate' ? 'bg-orange-500' : 
+                        recipe.fields.difficulty === 'Challenging' ? 'bg-red-500' : 'bg-gray-500'}`}
                   >
-                    {recipe.difficulty}
+                    {recipe.fields.difficulty}
                   </span>
                 </div>
               </div>
             </Link>
-          ))}
+          );
+        })}
       </div>
     </div>
+    </HydrationBoundary>
   );
 };
-
-export default Recipes;
-
-

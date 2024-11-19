@@ -36,7 +36,7 @@ export default function AboutPage() {
             We believe that food is more than just sustenance—it’s an experience. Our goal is to bring the joy of cooking dumplings from around the world to your kitchen.
           </p>
           <p className="text-lg text-gray-600 dark:text-gray-400 mt-4">
-            Whether you're a beginner or a seasoned cook, we offer recipes, guides, and tips to help you master the art of dumpling-making.
+            Whether you&apos;re a beginner or a seasoned cook, we offer recipes, guides, and tips to help you master the art of dumpling-making.
           </p>
           <Link href="/contact">
             <button className="mt-6 px-6 py-3 rounded-full bg-green-500 text-white hover:bg-green-600 transition-colors duration-300">

@@ -125,18 +125,17 @@ import meatDump from '/public/images/meatD.png';
 import ideaImage from '/public/images/idea.png'; 
 import vegeDump from '/public/images/vegeDump.jpg';
 import Link from 'next/link';
-import { getAllRecipes } from '@/lib/contentful/api';
 
 
 export default async function HomePage() {
   const randomRecipes = getRandomRecipes(); // Get 3 random recipes
 
-  let data = [];
-  try {
-    data = await getAllRecipes(); // Fetch recipes data
-  } catch (error) {
-    console.error("Error fetching recipes:", error);
-  }
+  // let data = [];
+  // try {
+  //   data = await getAllRecipes(); // Fetch recipes data
+  // } catch (error) {
+  //   console.error("Error fetching recipes:", error);
+  // }
 
   return (
     <div>
@@ -146,8 +145,7 @@ export default async function HomePage() {
       ) : (
         <p>Loading recipes...</p> // Fallback if data is not loaded yet
       )} */}
-
-      <section className="relative">
+<section className="relative bg-gray-50 dark:bg-[#2d2e55]"> {/* Add background color */}
         <Image
           src={dumplingsHero}
           alt="Delicious Dumplings"
@@ -172,13 +170,13 @@ export default async function HomePage() {
     </p>
   </div>
         {/* About Section */}
-        <div className="absolute top-20 right-12 bg-white shadow-lg rounded-full w-72 h-72 dark:bg-[#22223c] dark:text-gray-200 flex items-center justify-center text-center p-4">
+        <div className="cursor-dumpling absolute top-20 right-12 bg-white shadow-lg rounded-full w-72 h-72 dark:bg-[#22223c] dark:text-gray-200 flex items-center justify-center text-center p-4">
   <div>
     <h2 className="text-xl font-semibold text-[#3a3967] dark:text-gray-200">
       About Our Site
     </h2>
     <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-      Discover traditional and modern dumpling recipes you'll love, with step-by-step guidance for beginners and experts alike.
+      Discover traditional and modern dumpling recipes you&apos;ll love, with step-by-step guidance for beginners and experts alike.
     </p>
     <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
       We offer a variety of recipes, from sweet to savory, simple to sophisticated.
@@ -188,96 +186,139 @@ export default async function HomePage() {
     </button>
   </div>
 </div>
-
       </section>
 {/* Recipe Categories Section */}
-<section className="mt-8 py-16 bg-gray-50 dark:bg-[#2d2e55] text-center"> {/* Reduced top margin to mt-8 */}
-        <div className="max-w-7xl mx-auto mb-8">
-          <h2 className="text-4xl font-semibold text-[#3a3967] dark:text-gray-200">Recipe Categories</h2>
-          <p className="text-lg text-gray-600 dark:text-gray-400 mt-4">
-            Discover a wide variety of dumpling recipes, organized by categories to suit your tastes.
-          </p>
-        </div>
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-6">
-          <Link href="/recipes/vegetarian">
-            <div className="transform transition-transform duration-300 hover:scale-105 bg-yellow-100 shadow-md rounded-lg cursor-pointer p-4">
-              <Image
-                src={vegeDump}
-                alt="Vegetarian Dumplings"
-                width={500}
-                height={300}
-                className="w-full h-48 object-cover"
-              />
-              <h3 className="text-xl font-semibold text-[#3a3967] mt-4">Vegetarian Dumplings</h3>
-            </div>
-          </Link>
-          <Link href="/recipes/meat">
-            <div className="transform transition-transform duration-300 hover:scale-105 bg-green-100 shadow-md rounded-lg cursor-pointer p-4">
-              <Image
-                src={meatDump}
-                alt="Meat Dumplings"
-                width={500}
-                height={300}
-                className="w-full h-48 object-cover"
-              />
-              <h3 className="text-xl font-semibold text-[#3a3967] mt-4">Meat Dumplings</h3>
-            </div>
-          </Link>
-          <Link href="/recipes/sweet">
-            <div className="transform transition-transform duration-300 hover:scale-105 bg-pink-100 shadow-md rounded-lg cursor-pointer p-4">
-              <Image
-                src={sweetDump}
-                alt="Sweet Dumplings"
-                width={500}
-                height={300}
-                className="w-full h-48 object-cover"
-              />
-              <h3 className="text-xl font-semibold text-[#3a3967] mt-4">Sweet Dumplings</h3>
-            </div>
-          </Link>
-        </div>
-      </section>
-
-      {/* Daily Inspiration Section */}
-      <section className="mt-8 py-16 bg-gray-100 dark:bg-[#2d2e55] text-center"> {/* Reduced top margin to mt-8 */}
-        <div className="max-w-7xl mx-auto mb-8">
-          <div className="flex items-center justify-center space-x-4">
-            <h2 className="text-3xl font-semibold text-[#3a3967] dark:text-gray-200">Daily Inspiration</h2>
-            <Image
-              src={ideaImage}
-              alt="Inspiration Idea"
-              width={40}
-              height={40}
-            />
+<section className="mt-0 py-8 pb-4 bg-gray-50 dark:bg-[#2d2e55] text-center">
+  <div className="max-w-7xl mx-auto mb-8">
+    <h2 className="text-4xl font-semibold text-[#3a3967] dark:text-gray-200">
+      Recipe Categories
+    </h2>
+    <p className="text-lg text-gray-600 dark:text-gray-400 mt-4">
+      Discover a wide variety of dumpling recipes, organized by categories to suit your tastes.
+    </p>
+  </div>
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 relative">
+    <Link href="/recipes/vegetarian">
+      <div className="relative group cursor-pointer">
+        <div className="relative transform transition-transform duration-300 group-hover:scale-105 group-hover:z-10">
+          <Image
+            src={vegeDump}
+            alt="Vegetarian Dumplings"
+            width={1600}
+            height={300}
+            className="w-full h-48 object-cover rounded-md"
+          />
+          <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-md">
+            <h3 className="text-xl font-semibold text-white">Vegetarian Dumplings</h3>
           </div>
-          <p className="text-lg text-gray-600 dark:text-gray-400 mt-4">
-            Start your culinary journey with these handpicked dumpling recipes for the day!
-          </p>
         </div>
-        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
-          {randomRecipes.map((recipe) => (
-            <Link href={`/recipes/${recipe.id}`} key={recipe.id} className="transform transition-transform duration-300 hover:scale-105 bg-white dark:bg-[#22223c] shadow-md rounded-lg overflow-hidden">
+      </div>
+    </Link>
+    <Link href="/recipes/meat">
+      <div className="relative group cursor-pointer">
+        <div className="relative transform transition-transform duration-300 group-hover:scale-105 group-hover:z-10">
+          <Image
+            src={meatDump}
+            alt="Meat Dumplings"
+            width={1600}
+            height={300}
+            className="w-full h-48 object-cover rounded-md"
+          />
+          <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-md">
+            <h3 className="text-xl font-semibold text-white">Meat Dumplings</h3>
+          </div>
+        </div>
+      </div>
+    </Link>
+    <Link href="/recipes/sweet">
+      <div className="relative group cursor-pointer">
+        <div className="relative transform transition-transform duration-300 group-hover:scale-105 group-hover:z-10">
+          <Image
+            src={sweetDump}
+            alt="Sweet Dumplings"
+            width={1600}
+            height={300}
+            className="w-full h-48 object-cover rounded-md"
+          />
+          <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-md">
+            <h3 className="text-xl font-semibold text-white">Sweet Dumplings</h3>
+          </div>
+        </div>
+      </div>
+    </Link>
+  </div>
+</section>
+
+{/* Daily Inspiration Section */}
+<section className="mt-0 py-16 bg-gray-50 dark:bg-[#2d2e55] text-center"> 
+  <div className="max-w-7xl mx-auto mb-8">
+    <div className="flex items-center justify-center space-x-4">
+      <h2 className="text-3xl font-semibold text-[#3a3967] dark:text-gray-200">Daily Inspiration</h2>
+      <Image
+        src={ideaImage}
+        alt="Inspiration Idea"
+        width={40}
+        height={40}
+      />
+    </div>
+    <p className="text-lg text-gray-600 dark:text-gray-400 mt-4">
+      Start your culinary journey with these handpicked dumpling recipes for the day!
+    </p>
+  </div>
+
+  <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    {randomRecipes.map((recipe) => {
+      const imageUrl = recipe.image;
+
+      return (
+        <Link 
+          href={`/recipes/${recipe.id}`} 
+          key={recipe.id} 
+          passHref
+        >
+          <div className="flex flex-col items-start cursor-pointer">
+            
+            <div className="relative w-full h-60 overflow-hidden rounded-2xl shadow-md">
               <Image
-                src={recipe.image}
+                src={imageUrl}
                 alt={recipe.title}
-                width={500}
-                height={300}
-                className="w-full h-48 object-cover"
+                layout="fill"
+                className="object-cover transition-transform duration-300 hover:scale-105 rounded-2xl"
               />
-              <div className="p-6">
-                <h3 className="text-2xl font-bold text-[#3a3967] dark:text-gray-200">{recipe.title}</h3>
-                <p className="mt-2 text-gray-500 dark:text-gray-400">Time: {recipe.time}</p>
-                <p className="mt-1 text-gray-700 dark:text-gray-400">Difficulty: {recipe.difficulty}</p>
-                <div className="flex justify-center mt-4">
-                  <button className="px-4 py-2 rounded-full bg-green-500 text-white hover:bg-green-600 transition-colors duration-300">
-                    View Recipe
-                  </button>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
+            </div>
+            
+            {/* Recipes info */}
+            <div className="mt-3 text-left w-full">
+              <h3 className="text-md font-bold uppercase mb-1 text-[#3a3967] dark:text-gray-200">
+                {recipe.title}
+              </h3>
+              <p className="text-xs mb-2 flex items-center text-[#3a3967] dark:text-gray-400">
+                <Image
+                  src="/images/clock1.png"
+                  alt="Time Icon"
+                  width={14}
+                  height={14}
+                  className="mr-1"
+                />
+                {recipe.time}
+              </p>
+              {/* Difficulty level */}
+              <span
+                className={`text-xs font-medium text-white px-2 py-1 rounded-full uppercase
+                  ${recipe.difficulty === 'Easy' ? 'bg-green-500' : 
+                    recipe.difficulty === 'Not too tricky' ? 'bg-blue-500' : 
+                    recipe.difficulty === 'Moderate' ? 'bg-orange-500' : 
+                    recipe.difficulty === 'Challenging' ? 'bg-red-500' : 'bg-gray-500'}`}
+              >
+                {recipe.difficulty}
+              </span>
+            </div>
+          </div>
+        </Link>
+      );
+    })}
+  </div>
+</section>
 
       {/* Footer Section */}
       <footer className="bg-[#2d2e55] py-8">

@@ -192,7 +192,7 @@ export default function ShoppingListPage() {
         {/* Decorative Illustrations */}
         <div className="absolute bottom-[-30px] left-[-30px]">
           <Image
-            src="/images/dough.png" // Replace with your actual path
+            src="/images/dumpling.png" // Replace with your actual path
             alt="Cartoon woman"
             width={70}
             height={70}

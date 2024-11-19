@@ -17,6 +17,9 @@
 }
 
 @layer utilities {
+  .cursor-dumpling {
+    cursor: url('/images/dumpling.png'), auto;
+  }
   .text-balance {
     text-wrap: balance;
   }
