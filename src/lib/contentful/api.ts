@@ -2,9 +2,13 @@
 
 import client from "./contentfulClient";
 
-export async function allRecipes() {
+export async function allRecipes(kind: string | null) {
+
+
   const entry = await client.getEntries({
-    content_type: "recipe"
+    content_type: "recipe",
+    "fields.category": kind,
+
   });
 
   if (!entry) {
@@ -13,19 +17,26 @@ export async function allRecipes() {
 
   const items = entry.items;
 
+  console.log(items)
+
 
   return items;
 }
 
 export async function getRecipe(id: string) {
-  const entry = await client.getEntry(id);
 
-  console.log("entry ",entry)
+  console.log("ID",id)
+
+  const entry = await client.getEntries({
+    content_type: "recipe",
+    limit:1 ,
+  "fields.id": id,
+  });
+  
   if (!entry) {
     return null
   }
 
 
-
-  return entry.fields;
+  return entry.items[0].fields;
 }

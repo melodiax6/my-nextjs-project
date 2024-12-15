@@ -1,13 +1,19 @@
-
 import Image from 'next/image';
 import Link from 'next/link';
 import { allRecipes } from '@/lib/contentful/api';
 import { HydrationBoundary } from '@/components/HydrationBoundary';
 
-export const dynamic = "force-static";
 
-export default async function Recipes() {
-  const data = await allRecipes();
+type SearchParams = {searchParams: {kind: string | null}};
+
+export default async function Recipes({ searchParams }: SearchParams) {
+  const { kind } = searchParams;
+
+
+
+  const data = await allRecipes(kind);
+
+  console.log(data?.length)
   
   if (!data) {
     return null;
@@ -30,8 +36,7 @@ export default async function Recipes() {
           return (
             <Link
               href={{
-                pathname: `/recipes/${recipe.fields.id}`,
-                query: { recipe: JSON.stringify(recipe) }
+                pathname: `/recipes/${recipe.fields.id}`
               }}
               passHref
               key={index}
