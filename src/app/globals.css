@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+:host {
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%; /* Stare wersje Chrome/Safari */
+  text-size-adjust: 100%; /* Nowoczesne przeglądarki */
+  tab-size: 4;
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-feature-settings: normal;
+  font-variation-settings: normal;
+  -webkit-tap-highlight-color: transparent;
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
