@@ -34,9 +34,7 @@ export default async function HomePage() {
     >
       Explore the World of Dumplings
     </h1>
-    <p
-      className="mt-4 text-xl text-[#3a3967] dark:text-gray-400 -ml-8 lg:-ml-16 drop-shadow-[1px_1px_3px_rgba(255,255,255,0.6)] dark:drop-shadow-none"
-    >
+    <p className="mt-4 text-xl text-[#3a3967] dark:text-gray-400 -ml-8 lg:-ml-16 drop-shadow-[1px_1px_3px_rgba(255,255,255,0.6)] dark:drop-shadow-none">
       A variety of dumplings from around the globe for you to try at home.
     </p>
   </div>

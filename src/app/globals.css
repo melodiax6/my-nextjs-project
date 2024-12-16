@@ -4,14 +4,8 @@
 
 html,
 :host {
-  line-height: 1.5;
-  -webkit-text-size-adjust: 100%; /* Stare wersje Chrome/Safari */
-  text-size-adjust: 100%; /* Nowoczesne przeglądarki */
-  tab-size: 4;
-  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  font-feature-settings: normal;
-  font-variation-settings: normal;
-  -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%; /* Add this line for broader support */
 }
 
 :root {
