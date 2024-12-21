@@ -56,13 +56,13 @@ export default function ShoppingListPage() {
                 <div key={item[0]} className="bg-white rounded-lg p-4 flex items-start gap-4 shadow-md">
                   <Image
                     src={item[1].image}
-                    alt={item[1].name}
+                    alt={item[0]}
                     width={50}
                     height={50}
                     className="rounded-lg shadow"
                   />
                   <div className="flex-1">
-                    <span className="block text-lg font-medium text-[#4c2b85]">{item[1].name}</span>
+                    <span className="block text-lg font-medium text-[#4c2b85]">{item[0]}</span>
                     <ul>
 
                       <li>{item[1].value}</li>
@@ -87,7 +87,7 @@ export default function ShoppingListPage() {
                     )} */}
                   </div>
                   <button
-                    onClick={() => removeFromShoppingList(item.id)}
+                    onClick={() => removeFromShoppingList(item[0])}
                     className="bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"
                   >
                     Remove

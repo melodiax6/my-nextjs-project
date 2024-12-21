@@ -2,11 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-:host {
-    -webkit-text-size-adjust: 100%;
-    text-size-adjust: 100%; /* Add this line for broader support */
-}
+
 
 :root {
   --foreground-rgb: 0, 0, 0;
