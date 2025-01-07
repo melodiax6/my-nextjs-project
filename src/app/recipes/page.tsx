@@ -113,6 +113,9 @@
 //     </HydrationBoundary>
 //   );
 // }
+'use client';
+
+import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { allRecipes } from '@/lib/contentful/api';
@@ -139,16 +142,14 @@ type Recipe = {
   fields: RecipeFields;
 };
 
-// Typing for the search parameters passed to the component
-type SearchParams = { kind: string | null };
-
 // The main Recipes component, which fetches and displays recipes
-export default async function Recipes({ searchParams }: { searchParams: SearchParams }) {
-  // Extract kind from searchParams
-  const { kind } = searchParams;
+export default function Recipes() {
+  // Use the useSearchParams hook to get search parameters
+  const searchParams = useSearchParams();
+  const kind = searchParams.get('kind') || null; // Get the 'kind' parameter from the URL
 
-  // Typing for the fetched data
-  const data: Recipe[] | null = await allRecipes(kind);
+  // Fetch the recipes based on the 'kind' parameter
+  const data: Recipe[] | null = kind ? await allRecipes(kind) : await allRecipes(null);
 
   // If no data exists, return null (or loading UI)
   if (!data) {
