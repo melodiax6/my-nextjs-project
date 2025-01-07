@@ -149,7 +149,20 @@ export default async function Recipes() {
   const kind = searchParams.get('kind') || null; // Get the 'kind' parameter from the URL
 
   // Fetch the recipes based on the 'kind' parameter
-  const data: Recipe[] | null = kind ? await allRecipes(kind) : await allRecipes(null);
+  const rawData = kind ? await allRecipes(kind) : await allRecipes(null);
+
+  // Transform raw data to match the Recipe[] type
+  const data: Recipe[] | null = rawData
+    ? rawData.map((entry: any) => ({
+        fields: {
+          id: entry.sys.id,
+          title: entry.fields.title,
+          time: entry.fields.time,
+          difficulty: entry.fields.difficulty,
+          image: entry.fields.image || undefined,
+        },
+      }))
+    : null;
 
   // If no data exists, return null (or loading UI)
   if (!data) {
