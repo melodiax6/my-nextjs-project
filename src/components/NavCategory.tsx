@@ -81,7 +81,6 @@
 // };
 
 // export default NavCategory;
-
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -111,8 +110,17 @@ const NavCategory: React.FC<NavCategoryProps> = ({ title, children }) => {
         if (title === "Recipes") {
             const fetchRecipes = async () => {
                 try {
-                    const data = await allRecipes("recipes");
-                    setRecipes(data || []);
+                    const rawData = await allRecipes("recipes");
+
+                    // Transform the raw data to match the Recipe type
+                    const transformedData = rawData.map((entry: any) => ({
+                        fields: {
+                            id: entry.sys.id,
+                            title: entry.fields.title,
+                        },
+                    })) as Recipe[];
+
+                    setRecipes(transformedData);
                 } catch (error) {
                     console.error("Error fetching recipes:", error);
                 }
@@ -140,7 +148,10 @@ const NavCategory: React.FC<NavCategoryProps> = ({ title, children }) => {
                 {title === "Recipes" ? (
                     recipes.length > 0 ? (
                         recipes.map((recipe) => (
-                            <li key={recipe.fields.id} className="text-inherit text-base block px-4 py-2 transition-all duration-300">
+                            <li
+                                key={recipe.fields.id}
+                                className="text-inherit text-base block px-4 py-2 transition-all duration-300"
+                            >
                                 <a
                                     href={`/recipes/${recipe.fields.id}`}
                                     className="block w-full h-full hover:bg-[#FBB5A5] hover:text-[#3A3967] dark:hover:bg-[#FF8A65] dark:hover:text-[#22223c]"
@@ -150,7 +161,9 @@ const NavCategory: React.FC<NavCategoryProps> = ({ title, children }) => {
                             </li>
                         ))
                     ) : (
-                        <li className="text-inherit text-base block px-4 py-2 transition-all duration-300">Loading recipes...</li>
+                        <li className="text-inherit text-base block px-4 py-2 transition-all duration-300">
+                            Loading recipes...
+                        </li>
                     )
                 ) : (
                     React.Children.map(children, (child) =>
@@ -163,3 +176,4 @@ const NavCategory: React.FC<NavCategoryProps> = ({ title, children }) => {
 };
 
 export default NavCategory;
+
