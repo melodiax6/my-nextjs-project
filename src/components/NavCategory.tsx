@@ -112,13 +112,15 @@ const NavCategory: React.FC<NavCategoryProps> = ({ title, children }) => {
                 try {
                     const rawData = await allRecipes("recipes");
 
-                    // Transform the raw data to match the Recipe type
-                    const transformedData = rawData.map((entry: any) => ({
-                        fields: {
-                            id: entry.sys.id,
-                            title: entry.fields.title,
-                        },
-                    })) as Recipe[];
+                    // Check if rawData is not null before mapping
+                    const transformedData = rawData
+                        ? rawData.map((entry: any) => ({
+                              fields: {
+                                  id: entry.sys.id,
+                                  title: entry.fields.title,
+                              },
+                          }))
+                        : []; // If rawData is null, fallback to an empty array
 
                     setRecipes(transformedData);
                 } catch (error) {
@@ -176,4 +178,3 @@ const NavCategory: React.FC<NavCategoryProps> = ({ title, children }) => {
 };
 
 export default NavCategory;
-
