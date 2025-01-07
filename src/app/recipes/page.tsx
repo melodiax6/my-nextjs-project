@@ -11,7 +11,7 @@ type RecipeFields = {
   id: string;
   title: string;
   time: string;
-  difficulty: 'Easy' | 'Not too tricky' | 'Moderate' | 'Challenging';
+  difficulty: 'Easy' | 'Not too tricky' | 'Moderate' | 'Challenging' | 'Expert';
   image?: {
     fields: {
       file: {
@@ -34,9 +34,22 @@ export default function Recipes() {
 
   useEffect(() => {
     async function fetchData() {
-      const recipes = await allRecipes(kind);
-      setData(recipes);
+      const rawRecipes = await allRecipes(kind);
+
+      // Transform the raw data to match the Recipe type
+      const transformedRecipes = rawRecipes?.map((entry: any) => ({
+        fields: {
+          id: entry.sys.id,
+          title: entry.fields.title,
+          time: entry.fields.time,
+          difficulty: entry.fields.difficulty,
+          image: entry.fields.image,
+        },
+      })) as Recipe[]; // Use type assertion to indicate the transformation result
+
+      setData(transformedRecipes || null);
     }
+
     fetchData();
   }, [kind]);
 
@@ -107,6 +120,7 @@ export default function Recipes() {
     </HydrationBoundary>
   );
 }
+
 // import Image from 'next/image';
 // import Link from 'next/link';
 // import { allRecipes } from '@/lib/contentful/api';
