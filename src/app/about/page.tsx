@@ -33,7 +33,7 @@ export default function AboutPage() {
         <div className="max-w-5xl mx-auto mb-8">
           <h2 className="text-4xl font-semibold text-[#3a3967] dark:text-gray-200">Our Story</h2>
           <p className="text-lg text-gray-600 dark:text-gray-400 mt-4">
-            We believe that food is more than just sustenance—it’s an experience. Our goal is to bring the joy of cooking dumplings from around the world to your kitchen.
+            We believe that food is more than just sustenance—it&apos;s an experience. Our goal is to bring the joy of cooking dumplings from around the world to your kitchen.
           </p>
           <p className="text-lg text-gray-600 dark:text-gray-400 mt-4">
             Whether you&apos;re a beginner or a seasoned cook, we offer recipes, guides, and tips to help you master the art of dumpling-making.
