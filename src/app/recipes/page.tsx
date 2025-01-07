@@ -143,7 +143,7 @@ type Recipe = {
 };
 
 // The main Recipes component, which fetches and displays recipes
-export default function Recipes() {
+export default async function Recipes() {
   // Use the useSearchParams hook to get search parameters
   const searchParams = useSearchParams();
   const kind = searchParams.get('kind') || null; // Get the 'kind' parameter from the URL
