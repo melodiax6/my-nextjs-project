@@ -142,10 +142,10 @@ type Recipe = {
 // Typing for the search parameters passed to the component
 type SearchParams = { kind: string | null };
 
-// The main Recipes component, which fetches and displays recipes
+// This function will handle the dynamic page component for the recipes
 export default async function Recipes({ searchParams }: { searchParams: SearchParams }) {
-  // Extract kind from searchParams
-  const { kind } = searchParams;
+  // Ensure searchParams is correctly typed and destructured
+  const { kind } = searchParams || {};
 
   // Typing for the fetched data
   const data: Recipe[] | null = await allRecipes(kind);
