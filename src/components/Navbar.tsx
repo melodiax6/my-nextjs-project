@@ -16,6 +16,8 @@ const Navbar: React.FC = () => {
             <div className="flex items-center mb-4 md:mb-0">
                 <Image
                     src="/images/dumplings2.jpg"
+                    width={500}
+                    height={800}
                     alt="logo"
                     className="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 rounded-full object-cover mr-4 sm:mr-6"
                 />
