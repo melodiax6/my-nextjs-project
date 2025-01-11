@@ -26,13 +26,11 @@ export default function ShoppingListPage() {
       handleNoteSubmit(id);
     }
   };
-  Object.entries(shoppingList).map(el => console.log("Hello", el))
-
 
   return (
     <div className="min-h-screen bg-[#e5e7eb] p-6 flex flex-col items-center">
       <h1 className="text-4xl font-bold text-[#4c2b85] mb-10">Shopping List</h1>
-      <div className="bg-[#e5e7eb] border-4 border-[#fabd3b] rounded-lg p-6 max-w-3xl w-full shadow-lg relative">
+      <div className="bg-[#fabd3b] border-4 border-[#fabd3b] rounded-lg p-6 max-w-3xl w-full shadow-lg relative">
         
         {/* Shopping List Header */}
         <div className="flex justify-between items-center mb-6">
@@ -46,14 +44,13 @@ export default function ShoppingListPage() {
           />
         </div>
 
-
-
-        {/* Shopping Items List */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Shopping Items List with Light Yellow Background */}
+        <div className="bg-[#fffbe0] p-4 rounded-md">
           {Object.entries(shoppingList).length > 0 ? (
             Object.entries(shoppingList).map((item) => {
+              const ingredients = Array.isArray(item[1].value) ? item[1].value : [item[1].value]; // Ensure it's an array
               return (
-                <div key={item[0]} className="bg-white rounded-lg p-4 flex items-start gap-4 shadow-md">
+                <div key={item[0]} className="bg-white rounded-lg p-4 flex items-start gap-4 shadow-md mb-4">
                   <Image
                     src={item[1].image}
                     alt={item[0]}
@@ -63,28 +60,11 @@ export default function ShoppingListPage() {
                   />
                   <div className="flex-1">
                     <span className="block text-lg font-medium text-[#4c2b85]">{item[0]}</span>
-                    <ul>
-
-                      <li>{item[1].value}</li>
+                    <ul className="list-disc pl-5">
+                      {ingredients.map((ingredient, index) => (
+                        <li key={index} className="text-gray-700">{ingredient}</li>
+                      ))}
                     </ul>
-
-                    {/* {editingNoteId === item.id ? (
-                      <textarea
-                        placeholder="Write a note..."
-                        value={notes[item.id] || ''}
-                        onChange={(e) => handleNoteChange(item.id, e.target.value)}
-                        onKeyPress={(e) => handleKeyPress(e, item.id)}
-                        className="mt-2 w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-[#fabd3b] text-gray-700 resize-none"
-                        rows={2}
-                      />
-                    ) : (
-                      <p
-                        onClick={() => setEditingNoteId(item.id)} // Clicking text allows editing
-                        className="mt-2 p-2 bg-gray-100 rounded-md cursor-pointer text-gray-700"
-                      >
-                        {notes[item.id] || 'Click to add a note...'}
-                      </p>
-                    )} */}
                   </div>
                   <button
                     onClick={() => removeFromShoppingList(item[0])}
@@ -93,10 +73,10 @@ export default function ShoppingListPage() {
                     Remove
                   </button>
                 </div>
-              )
+              );
             })
           ) : (
-            <p className="text-gray-500 text-center col-span-2">Your shopping list is currently empty.</p>
+            <p className="text-gray-500 text-center">Your shopping list is currently empty.</p>
           )}
         </div>
         
@@ -113,4 +93,6 @@ export default function ShoppingListPage() {
     </div>
   );
 }
+
+
 
