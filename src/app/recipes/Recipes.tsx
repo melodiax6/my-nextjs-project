@@ -31,6 +31,8 @@ type RecipeProps = {
 
 export default function Recipes({kind}: RecipeProps) {
 
+  console.log("kind",kind)
+
   const [data, setData] = useState<Recipe[] | null>(null);
 
   useEffect(() => {
