@@ -8,13 +8,11 @@ import vegeDump from '/public/images/vegeDump.jpg';
 import Link from 'next/link';
 import DumplingsCard from '@/components/DumplingsCard';
 
-import { Suspense } from 'react'
 export default async function HomePage() {
   const randomRecipes = getRandomRecipes(); // Get 3 random recipes
 
 
   return (
-<Suspense>
     <div>
      
 <section className="relative bg-gray-50 dark:bg-[#2d2e55]"> {/* Add background color */}
@@ -152,6 +150,5 @@ export default async function HomePage() {
         </div>
       </footer>
     </div>
-    </Suspense>
   );
 }
