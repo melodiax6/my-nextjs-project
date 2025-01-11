@@ -1,5 +1,11 @@
 import { getRandomRecipes } from '../utils/recipeData';
-import Home from './Home';
+
+import dynamic from 'next/dynamic'
+ 
+const Home = dynamic(
+  () => import('./Home'),
+  { ssr: false }
+)
 
 export default async function HomePage() {
   const randomRecipes = getRandomRecipes(); // Get 3 random recipes
