@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { allRecipes } from '@/lib/contentful/api';
 import { HydrationBoundary } from '@/components/HydrationBoundary';
+import { useSearchParams } from 'next/navigation';
 
 type RecipeFields = {
   id: string;
@@ -25,11 +26,10 @@ type Recipe = {
   fields: RecipeFields;
 };
 
-type RecipeProps = {
-  kind: string |null
-}
 
-export default function Recipes({kind}: RecipeProps) {
+export default function Recipes() {
+  const params = useSearchParams();
+  const kind = params?.get("kind");
 
   console.log("kind",kind)
 

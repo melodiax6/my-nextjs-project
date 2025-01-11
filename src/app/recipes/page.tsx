@@ -1,13 +1,9 @@
 
 import Recipes from './Recipes';
 
-type Params = {
-  searchParams: {[key: string]: string}
-}
 
-
-export default function Page({searchParams}: Params) {
+export default function Page() {
   return (
-   <Recipes kind={searchParams.kind ?? null} />
+   <Recipes />
   );
 }
