@@ -28,7 +28,7 @@ type Recipe = {
 
 export default function Recipes() {
   const searchParams = useSearchParams();
-  const kind = searchParams.get('kind') || null;
+  const kind = searchParams?.get('kind');
 
   const [data, setData] = useState<Recipe[] | null>(null);
 
