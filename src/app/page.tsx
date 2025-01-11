@@ -1,3 +1,4 @@
+"use client"
 import { getRandomRecipes } from '../utils/recipeData';
 
 import dynamic from 'next/dynamic'
