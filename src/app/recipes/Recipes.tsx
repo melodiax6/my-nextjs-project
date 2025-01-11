@@ -26,7 +26,7 @@ type Recipe = {
 };
 
 type RecipeProps = {
-  kind: "sweet" | "meat" | "vege" |null
+  kind: string |null
 }
 
 export default function Recipes({kind}: RecipeProps) {

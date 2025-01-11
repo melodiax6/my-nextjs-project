@@ -2,7 +2,7 @@
 import Recipes from './Recipes';
 
 type Params = {
-  params: {kind?: "meat"| "sweet"|"vege"}
+  params: {kind?: string}
 }
 
 
