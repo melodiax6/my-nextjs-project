@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { allRecipes } from '@/lib/contentful/api';
-import { HydrationBoundary } from '@/components/HydrationBoundary';
 import { useSearchParams } from 'next/navigation';
 
 type RecipeFields = {
@@ -30,8 +29,6 @@ type Recipe = {
 export default function Recipes() {
   const params = useSearchParams();
   const kind = params?.get("kind");
-
-  console.log("kind",kind)
 
   const [data, setData] = useState<Recipe[] | null>(null);
 
@@ -61,7 +58,6 @@ export default function Recipes() {
   }
 
   return (
-    <HydrationBoundary fallback="Loading...">
       <div className="flex flex-col items-center p-4 bg-gray-50 min-h-screen font-sans">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 w-full max-w-6xl">
           {data.map((recipe, index) => {
@@ -120,6 +116,5 @@ export default function Recipes() {
           })}
         </div>
       </div>
-    </HydrationBoundary>
   );
 }

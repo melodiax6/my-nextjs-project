@@ -1,9 +1,10 @@
-
+import { Suspense } from 'react';
 import Recipes from './Recipes';
-
 
 export default function Page() {
   return (
-   <Recipes />
+    <Suspense>
+      <Recipes />
+    </Suspense>
   );
 }
