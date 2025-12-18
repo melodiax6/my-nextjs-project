@@ -7,7 +7,6 @@ import ideaImage from '/public/images/idea.png';
 import vegeDump from '/public/images/vegeDump.jpg';
 import Link from 'next/link';
 import DumplingsCard from '@/components/DumplingsCard';
-import { Suspense } from 'react';
 
 type HomeProps = {
   randomRecipes: any
@@ -17,7 +16,6 @@ export default function Home({randomRecipes}: HomeProps) {
 
 
   return (
-    <Suspense>
     <div>
      
 <section className="relative bg-gray-50 dark:bg-[#2d2e55]"> {/* Add background color */}
@@ -155,6 +153,5 @@ export default function Home({randomRecipes}: HomeProps) {
         </div>
       </footer>
     </div>
-    </Suspense>
   );
 }
