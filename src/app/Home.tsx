@@ -61,11 +61,22 @@ export default function Home() {
         </div>
 
         {/* ABOUT BUBBLE */}
-        <div className="absolute top-24 sm:top-20 right-4 sm:right-8 lg:top-20 lg:right-12
-                        w-56 sm:w-64 md:w-72 h-56 sm:h-64 md:h-72
-                        bg-[hsl(var(--background))] shadow-lg rounded-full
-                        flex items-center justify-center text-center p-4 border border-[hsl(var(--foreground)/0.1)]
-                        max-w-[90vw]">
+     {/* ABOUT SECTION */}
+<div className="
+  relative 
+  mt-8 
+  mx-auto
+  w-full max-w-md
+  bg-[hsl(var(--background))] 
+  shadow-lg 
+  rounded-2xl 
+  p-6 
+  border border-[hsl(var(--foreground)/0.1)]
+
+  md:absolute md:top-20 md:right-12
+  md:w-72 md:h-72 md:rounded-full md:flex md:items-center md:justify-center md:text-center md:p-4
+">
+
           <div>
             <h2 className="text-lg sm:text-xl md:text-2xl font-playfair font-semibold">
               About Us
