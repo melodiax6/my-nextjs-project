@@ -9,18 +9,11 @@ import { useShoppingList } from "@/context/ShoppingListContext";
 import { getRecipe } from "@/lib/contentful/api";
 import { HydrationBoundary } from "@/components/HydrationBoundary";
 
-// Typing for Recipe fields
 type Ingredient = {
   sys: { id: string };
   fields: {
     title: string;
-    image?: {
-      fields: {
-        file: {
-          url: string;
-        };
-      };
-    };
+    image?: { fields: { file: { url: string } } };
   };
 };
 
@@ -29,53 +22,34 @@ type RecipeData = {
   ingredients: Ingredient[];
   ingredientsList?: any;
   steps?: any;
-  image?: {
-    fields: {
-      file: {
-        url: string;
-      };
-    };
-  };
+  image?: { fields: { file: { url: string } } };
   time: string;
   difficulty: string;
 };
 
-// Helper function to validate image URL
-const getImageUrl = (image: RecipeData['image']): string | null => {
-  if (!image || !image.fields || !image.fields.file || !image.fields.file.url) {
-    console.warn("Invalid image data:", image);
-    return null;
-  }
+const getImageUrl = (image: RecipeData['image'] | Ingredient['fields']['image']): string | null => {
+  if (!image?.fields?.file?.url) return null;
   return `https:${image.fields.file.url}`;
 };
 
-// Helper function to search for an ingredient title in the rich text ingredient list
-const findIngredientInList = (ingredientTitle: string | undefined, richText: any): { title: string, line: string } | null => {
+const findIngredientInList = (ingredientTitle: string | undefined, richText: any) => {
   if (!richText || !ingredientTitle) return null;
-
   const lines: string[] = [];
   const traverseNodes = (node: any) => {
-    if (node.nodeType === "text") {
-      lines.push(node.value);
-    } else if (node.content) {
-      node.content.forEach(traverseNodes);
-    }
+    if (node.nodeType === "text") lines.push(node.value);
+    else if (node.content) node.content.forEach(traverseNodes);
   };
-
   richText.content.forEach(traverseNodes);
 
   for (const line of lines) {
-    if (line.includes(ingredientTitle)) {
-      return { title: ingredientTitle, line };
-    }
+    if (line.includes(ingredientTitle)) return { title: ingredientTitle, line };
   }
-
   return null;
 };
 
 const Recipe = () => {
   const params = useParams();
-  const recipeId = params?.id as string; // Ensure recipeId is a string
+  const recipeId = params?.id as string;
   const [recipeData, setRecipeData] = useState<RecipeData | null>(null);
   const [clickedIngredient, setClickedIngredient] = useState<{ title: string, line: string } | null>(null);
   const { addToShoppingList } = useShoppingList();
@@ -86,35 +60,23 @@ const Recipe = () => {
     async function fetchRecipeData() {
       try {
         const recipe = await getRecipe(recipeId);
-
-        if (!recipe) {
-          console.error("Recipe not found");
-          return;
-        }
-
-        setRecipeData(recipe as RecipeData); // Ensure proper type
+        if (!recipe) return;
+        setRecipeData(recipe as RecipeData);
       } catch (error) {
-        console.error("Error fetching recipe:", error);
+        console.error(error);
       }
     }
 
     fetchRecipeData();
   }, [recipeId]);
 
-  if (!recipeData) {
-    return <div className="text-center text-gray-500">Loading...</div>;
-  }
+  if (!recipeData) return <div className="text-center text-gray-500 dark:text-gray-300">Loading...</div>;
 
   const { title, ingredients = [], ingredientsList, steps, image, time, difficulty } = recipeData;
 
   const handleIngredientClick = (ingredient: Ingredient) => {
-    if (!ingredientsList) {
-      console.error("No ingredients list available");
-      return;
-    }
-
+    if (!ingredientsList) return;
     const result = findIngredientInList(ingredient.fields?.title, ingredientsList);
-
     if (result) {
       setClickedIngredient(result);
       addToShoppingList({
@@ -131,29 +93,35 @@ const Recipe = () => {
     <HydrationBoundary fallback="something">
       <Row>
         <div className="flex flex-col items-center p-5 w-full">
-          <div className="w-full bg-white rounded-lg shadow-lg flex flex-col mb-8 border border-gray-200">
-            <div className="flex w-full flex-col md:flex-row-reverse">
+          {/* --- CARD --- */}
+          <div className="w-full bg-gray-50 dark:bg-[#1a1a2e] rounded-lg shadow-lg flex flex-col mb-8 border border-gray-200 dark:border-gray-700 transition-colors duration-300 overflow-hidden">
+            
+            {/* --- IMAGE & HEADER --- */}
+            <div className="flex flex-col md:flex-row-reverse">
               <div className="flex-1">
                 {getImageUrl(image) ? (
-                  <Image
-                    src={getImageUrl(image) || "/images/default-image.png"}
-                    alt={title || "Recipe"}
-                    width={500}
-                    height={500}
-                    quality={100}
-                    className="w-full h-full object-cover block shadow-md"
-                  />
+                  <div className="relative w-full h-80 md:h-full bg-gray-200 dark:bg-gray-800">
+                    <Image
+                      src={getImageUrl(image) || "/images/default-image.png"}
+                      alt={title || "Recipe"}
+                      fill
+                      style={{ objectFit: 'cover' }}
+                      className="rounded-lg shadow-md"
+                    />
+                  </div>
                 ) : (
-                  <div className="w-full h-full bg-gray-100 flex items-center justify-center rounded-lg">
-                    <p className="text-gray-400">No image available</p>
+                  <div className="w-full h-80 md:h-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center rounded-lg">
+                    <p className="text-gray-400 dark:text-gray-300">No image available</p>
                   </div>
                 )}
               </div>
 
+              {/* --- DETAILS --- */}
               <div className="flex-1 p-6">
-                <h1 className="text-center text-4xl font-extrabold text-[#3a3967] mb-2 uppercase">{title}</h1>
+                <h1 className="text-4xl font-extrabold text-center uppercase mb-2 text-gray-900 dark:text-gray-100">{title}</h1>
 
-                <div className="flex justify-center space-x-8 text-lg text-[#3a3967] mb-8 mt-4">
+                {/* --- INFO --- */}
+                <div className="flex justify-center space-x-8 text-lg mb-8 mt-4 text-gray-700 dark:text-gray-300">
                   <div className="flex items-center space-x-2">
                     <Image src="/images/clock1.png" alt="Time" width={24} height={24} />
                     <span>{time}</span>
@@ -168,7 +136,8 @@ const Recipe = () => {
                   </div>
                 </div>
 
-                <h2 className="text-2xl font-semibold border-b-2 border-gray-300 pb-2 mb-4">Ingredients</h2>
+                {/* --- INGREDIENTS --- */}
+                <h2 className="text-2xl font-semibold border-b-2 border-gray-300 dark:border-gray-600 pb-2 mb-4">Ingredients</h2>
                 <div className="grid grid-cols-4 gap-4">
                   {ingredients.length > 0 ? (
                     ingredients.map((ingredient, index) => (
@@ -190,29 +159,31 @@ const Recipe = () => {
                             <span className="text-white text-sm font-bold">+</span>
                           </div>
                         </div>
-                        <p className="text-gray-800 mt-2">{ingredient.fields?.title}</p>
+                        <p className="mt-2 text-gray-800 dark:text-gray-200">{ingredient.fields?.title}</p>
                       </div>
                     ))
                   ) : (
-                    <p>No ingredients available</p>
+                    <p className="text-gray-700 dark:text-gray-300">No ingredients available</p>
                   )}
                 </div>
 
+                {/* --- CLICKED INGREDIENT --- */}
                 {clickedIngredient && (
-                  <div className="mt-4 text-center text-lg text-gray-800">
+                  <div className="mt-4 text-center text-lg text-gray-800 dark:text-gray-200">
                     <p>
                       <strong>{clickedIngredient.title}:</strong> {clickedIngredient.line}
                     </p>
                   </div>
                 )}
 
-                <h2 className="text-2xl font-semibold border-b-2 border-gray-300 pb-2 mb-4">Detailed Ingredients</h2>
-                <ul className="list-disc pl-5 text-lg text-gray-700 leading-relaxed mb-5">
+                {/* --- DETAILED INGREDIENTS --- */}
+                <h2 className="text-2xl font-semibold border-b-2 border-gray-300 dark:border-gray-600 pb-2 mb-4">Detailed Ingredients</h2>
+                <ul className="list-disc pl-5 text-lg leading-relaxed mb-5 text-gray-700 dark:text-gray-300">
                   {ingredientsList ? (
                     documentToReactComponents(ingredientsList, {
                       renderNode: {
                         [BLOCKS.LIST_ITEM]: (node, children) => (
-                          <li className="text-gray-800">{children}</li>
+                          <li className="text-gray-800 dark:text-gray-200">{children}</li>
                         ),
                         [BLOCKS.PARAGRAPH]: (node, children) => <p>{children}</p>,
                       },
@@ -224,9 +195,10 @@ const Recipe = () => {
               </div>
             </div>
 
+            {/* --- PREPARATION STEPS --- */}
             <div className="p-6">
-              <h2 className="text-2xl font-semibold border-b-2 border-gray-300 pb-2 mb-4">Preparation Steps</h2>
-              <div className="space-y-6 text-lg text-gray-700">
+              <h2 className="text-2xl font-semibold border-b-2 border-gray-300 dark:border-gray-600 pb-2 mb-4">Preparation Steps</h2>
+              <div className="space-y-6 text-lg text-gray-700 dark:text-gray-300">
                 {steps ? (
                   documentToReactComponents(steps, {
                     renderNode: {
@@ -238,12 +210,8 @@ const Recipe = () => {
                           <p className="flex-1">{children}</p>
                         </div>
                       ),
-                      [BLOCKS.OL_LIST]: (node, children) => (
-                        <ol className="list-decimal pl-6">{children}</ol>
-                      ),
-                      [BLOCKS.LIST_ITEM]: (node, children) => (
-                        <li className="mb-1">{children}</li>
-                      ),
+                      [BLOCKS.OL_LIST]: (node, children) => <ol className="list-decimal pl-6">{children}</ol>,
+                      [BLOCKS.LIST_ITEM]: (node, children) => <li className="mb-1">{children}</li>,
                     },
                   })
                 ) : (
@@ -251,6 +219,7 @@ const Recipe = () => {
                 )}
               </div>
             </div>
+
           </div>
         </div>
       </Row>
@@ -259,3 +228,4 @@ const Recipe = () => {
 };
 
 export default Recipe;
+

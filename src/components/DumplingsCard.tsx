@@ -1,20 +1,20 @@
 import Link from "next/link";
-import Image, { StaticImageData } from 'next/image';
+import Image  from 'next/image';
 
 
 interface DumplingsCardProps {
   kind: "meat" | "sweet" | "vege",
-  image: StaticImageData,
+  src: string,
   title: string
 }
 
-export default function DumplingsCard({kind, image, title} :DumplingsCardProps) {
+export default function DumplingsCard({kind, src, title} :DumplingsCardProps) {
   return (
     <Link href={`/recipes/?kind=${kind}`}>
       <div className="relative group cursor-pointer">
         <div className="relative transform transition-transform duration-300 group-hover:scale-105 group-hover:z-10">
           <Image
-            src={image}
+            src={src}
             alt={title}
             width={1600}
             height={300}

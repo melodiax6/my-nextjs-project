@@ -17,26 +17,29 @@ export default function ShoppingListPage() {
   };
 
   const handleNoteSubmit = (id: string) => {
-    setEditingNoteId(null); // Exit edit mode to close the textarea
+    setEditingNoteId(null);
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLTextAreaElement>, id: string) => {
     if (event.key === 'Enter') {
-      event.preventDefault(); // Prevent new line from being added
+      event.preventDefault();
       handleNoteSubmit(id);
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#e5e7eb] p-6 flex flex-col items-center">
-      <h1 className="text-4xl font-bold text-[#4c2b85] mb-10">Shopping List</h1>
-      <div className="bg-[#fabd3b] border-4 border-[#fabd3b] rounded-lg p-6 max-w-3xl w-full shadow-lg relative">
+    <div className="min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))] p-6 flex flex-col items-center font-poppins">
+      <h1 className="text-4xl font-playfair font-bold mb-10">Shopping List</h1>
+
+      <div className="bg-yellow-400 dark:bg-yellow-600 border-4 border-yellow-400 dark:border-yellow-600 rounded-lg p-6 max-w-3xl w-full shadow-lg relative">
         
         {/* Shopping List Header */}
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-semibold text-[#4c2b85]">Look and write the food below.</h2>
+          <h2 className="text-2xl font-playfair font-semibold">
+            Look and write the food below.
+          </h2>
           <Image
-            src="/images/shopping-bag.png" // Replace with your actual path
+            src="/images/shopping-bag.png"
             alt="Person holding groceries"
             width={60}
             height={60}
@@ -44,13 +47,13 @@ export default function ShoppingListPage() {
           />
         </div>
 
-        {/* Shopping Items List with Light Yellow Background */}
-        <div className="bg-[#fffbe0] p-4 rounded-md">
+        {/* Shopping Items List */}
+        <div className="bg-yellow-50 dark:bg-gray-800 p-4 rounded-md">
           {Object.entries(shoppingList).length > 0 ? (
             Object.entries(shoppingList).map((item) => {
-              const ingredients = Array.isArray(item[1].value) ? item[1].value : [item[1].value]; // Ensure it's an array
+              const ingredients = Array.isArray(item[1].value) ? item[1].value : [item[1].value];
               return (
-                <div key={item[0]} className="bg-white rounded-lg p-4 flex items-start gap-4 shadow-md mb-4">
+                <div key={item[0]} className="bg-white dark:bg-gray-900 rounded-lg p-4 flex items-start gap-4 shadow-md mb-4">
                   <Image
                     src={item[1].image}
                     alt={item[0]}
@@ -59,16 +62,16 @@ export default function ShoppingListPage() {
                     className="rounded-lg shadow"
                   />
                   <div className="flex-1">
-                    <span className="block text-lg font-medium text-[#4c2b85]">{item[0]}</span>
+                    <span className="block text-lg font-medium text-purple-900 dark:text-purple-300">{item[0]}</span>
                     <ul className="list-disc pl-5">
                       {ingredients.map((ingredient, index) => (
-                        <li key={index} className="text-gray-700">{ingredient}</li>
+                        <li key={index} className="text-gray-700 dark:text-gray-300">{ingredient}</li>
                       ))}
                     </ul>
                   </div>
                   <button
                     onClick={() => removeFromShoppingList(item[0])}
-                    className="bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"
+                    className="bg-red-500 dark:bg-red-600 text-white p-2 rounded-full hover:bg-red-600 dark:hover:bg-red-700 transition-colors"
                   >
                     Remove
                   </button>
@@ -76,14 +79,14 @@ export default function ShoppingListPage() {
               );
             })
           ) : (
-            <p className="text-gray-500 text-center">Your shopping list is currently empty.</p>
+            <p className="text-gray-500 dark:text-gray-400 text-center">Your shopping list is currently empty.</p>
           )}
         </div>
-        
-        {/* Decorative Illustrations */}
+
+        {/* Decorative Illustration */}
         <div className="absolute bottom-[-30px] left-[-30px]">
           <Image
-            src="/images/dumpling.png" // Replace with your actual path
+            src="/images/dumpling.png"
             alt="Cartoon woman"
             width={70}
             height={70}
@@ -93,6 +96,7 @@ export default function ShoppingListPage() {
     </div>
   );
 }
+
 
 
 

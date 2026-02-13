@@ -1,104 +1,46 @@
-// import client from "./contentfulClient";
-
-// export async function allRecipes(kind: string | null) {
-//   const entry = await client.getEntries({
-//     content_type: "recipe",
-//     "fields.category": kind,
-//   });
-
-//   if (!entry) {
-//     return null;
-//   }
-
-//   const items = entry.items;
-
-//   console.log(items);
-
-//   return items;
-// }
-
-// export async function getRecipe(id: string) {
-//   const entry = await client.getEntries({
-//     content_type: "recipe",
-//     limit: 1,
-//     "fields.id": id,
-//   });
-
-//   if (!entry) {
-//     return null;
-//   }
-
-//   return entry.items[0].fields;
-// }
-
+// src/lib/contentful/api.ts
 import client from "./contentfulClient";
 
+// Pobiera wszystkie przepisy dla kategorii (lub wszystkie jeśli null)
 export async function allRecipes(kind: string | null) {
-  const entry = await client.getEntries({
-    content_type: "recipe",
-    "fields.category": kind,
-  });
+  try {
+    const entry = await client.getEntries({
+      content_type: "recipe",
+      ...(kind && { "fields.category": kind }),
+    });
 
-  if (!entry) {
-    return null;
+    if (!entry || !entry.items) {
+      console.warn("No entries returned from Contentful for allRecipes");
+      return [];
+    }
+
+    console.log("allRecipes items:", entry.items);
+
+    return entry.items.map((item) => item.fields);
+  } catch (error) {
+    console.error("Error fetching allRecipes:", error);
+    return [];
   }
-
-  const items = entry.items;
-
-  console.log(items);
-
-  return items;
 }
 
+// Pobiera jeden przepis po id
 export async function getRecipe(id: string) {
-  const entry = await client.getEntries({
-    content_type: "recipe",
-    limit: 1,
-    "fields.id": id,
-  });
+  try {
+    const entry = await client.getEntries({
+      content_type: "recipe",
+      limit: 1,
+      "fields.id": id,
+    });
 
-  if (!entry) {
+    if (!entry || !entry.items || entry.items.length === 0) {
+      console.warn(`Recipe with id "${id}" not found`);
+      return null;
+    }
+
+    console.log(`getRecipe id=${id} item:`, entry.items[0]);
+    return entry.items[0].fields;
+  } catch (error) {
+    console.error(`Error fetching recipe id=${id}:`, error);
     return null;
   }
-
-  return entry.items[0].fields;
 }
-// import client from "./contentfulClient";
-
-// export async function allRecipes(kind: string | null) {
-
-
-//   const entry = await client.getEntries({
-//     content_type: "recipe",
-//     "fields.category": kind,
-
-//   });
-
-//   if (!entry) {
-//     return null
-//   }
-
-//   const items = entry.items;
-
-//   console.log(items)
-
-
-//   return items;
-// }
-
-// export async function getRecipe(id: string) {
-
-
-//   const entry = await client.getEntries({
-//     content_type: "recipe",
-//     limit:1 ,
-//   "fields.id": id,
-//   });
-  
-//   if (!entry) {
-//     return null
-//   }
-
-
-//   return entry.items[0].fields;
-// }

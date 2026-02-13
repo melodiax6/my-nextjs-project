@@ -1,5 +1,7 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+import type { NextConfig } from 'next'
+ 
+// Next.js 16 - turbopack at the top level of nextConfig
+const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
@@ -18,6 +20,6 @@ const nextConfig = {
       },
     ],
   },
-};
-
-export default nextConfig;
+}
+ 
+export default nextConfig
