@@ -64,7 +64,7 @@ export default function Home() {
      {/* ABOUT SECTION */}
 <div className="
   relative 
-  mt-8 
+  mt-10 
   mx-auto
   w-full max-w-md
   bg-[hsl(var(--background))] 
@@ -73,8 +73,10 @@ export default function Home() {
   p-6 
   border border-[hsl(var(--foreground)/0.1)]
 
-  md:absolute md:top-20 md:right-12
-  md:w-72 md:h-72 md:rounded-full md:flex md:items-center md:justify-center md:text-center md:p-4
+ xl:absolute xl:top-20 xl:right-12
+xl:w-72 xl:h-72 xl:rounded-full 
+xl:flex xl:items-center xl:justify-center xl:text-center xl:p-4
+
 ">
 
           <div>
