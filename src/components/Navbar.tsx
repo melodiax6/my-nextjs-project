@@ -31,7 +31,7 @@ const Navbar: React.FC = () => {
             href="/"
             className="text-2xl sm:text-3xl md:text-3xl font-playfair font-bold hover:opacity-70 transition-opacity duration-300"
           >
-            DumplinGos
+            DumplinGo
           </Link>
         </div>
 
