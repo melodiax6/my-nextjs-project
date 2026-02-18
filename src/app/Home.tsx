@@ -59,9 +59,6 @@ export default function Home() {
             A variety of dumplings from around the globe for you to try at home.
           </p>
         </div>
-
-        {/* ABOUT BUBBLE */}
-     {/* ABOUT SECTION */}
 <div className="
   relative 
   mt-10 

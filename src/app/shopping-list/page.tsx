@@ -32,8 +32,6 @@ export default function ShoppingListPage() {
       <h1 className="text-4xl font-playfair font-bold mb-10">Shopping List</h1>
 
       <div className="bg-yellow-400 dark:bg-yellow-600 border-4 border-yellow-400 dark:border-yellow-600 rounded-lg p-6 max-w-3xl w-full shadow-lg relative">
-        
-        {/* Shopping List Header */}
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-playfair font-semibold">
             Look and write the food below.
@@ -82,8 +80,6 @@ export default function ShoppingListPage() {
             <p className="text-gray-500 dark:text-gray-400 text-center">Your shopping list is currently empty.</p>
           )}
         </div>
-
-        {/* Decorative Illustration */}
         <div className="absolute bottom-[-30px] left-[-30px]">
           <Image
             src="/images/dumpling.png"

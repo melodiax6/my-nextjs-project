@@ -12,7 +12,6 @@ const Search = () => {
   const [isDark, setIsDark] = useState(false);
   const [recipes, setRecipes] = useState<any[]>([]);
 
-  // Sprawdzenie trybu dark/light
   useEffect(() => {
     const root = document.documentElement;
     setIsDark(root.classList.contains("dark"));
@@ -23,13 +22,11 @@ const Search = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Pobranie wszystkich przepisów z Contentful
   useEffect(() => {
     async function fetchData() {
-      const rawRecipes = await allRecipes(null); // pobiera wszystkie przepisy
+      const rawRecipes = await allRecipes(null); 
       if (!rawRecipes) return;
 
-      // transformacja jak w Recipes.tsx
       const transformed = rawRecipes.map((entry: any) => ({
         id: entry.id || entry.fields?.id || 'unknown',
         title: entry.title || entry.fields?.title || 'Untitled',
@@ -43,7 +40,6 @@ const Search = () => {
     fetchData();
   }, []);
 
-  // Filtrowanie przepisów po wpisanym tytule
   const filteredRecipes = recipes.filter((recipe) =>
     recipe.title.toLowerCase().includes(searchValue.toLowerCase())
   );
@@ -52,7 +48,7 @@ const Search = () => {
 
   return (
     <div className="relative flex flex-col items-center">
-      {/* Ikona lupki w stanie spoczynku */}
+ 
       {!isSearchOpen && (
         <Image
           src={iconSrc}
@@ -60,12 +56,10 @@ const Search = () => {
           width={24}
           height={24}
           className="cursor-pointer ml-2 transition-transform duration-200 hover:scale-110"
-          style={{ filter: "none" }} // blokada przyciemniania
+          style={{ filter: "none" }} 
           onClick={() => setIsSearchOpen(true)}
         />
       )}
-
-      {/* Pole wyszukiwania */}
       {isSearchOpen && (
         <div className="relative flex items-center bg-[#FBB5A5] dark:bg-[#FFC8C2] p-3 rounded-full h-12 w-full max-w-lg shadow-lg">
           <input
@@ -92,8 +86,6 @@ const Search = () => {
           </button>
         </div>
       )}
-
-      {/* Wyniki wyszukiwania */}
       {isSearchOpen && searchValue && (
         <div className="absolute top-14 bg-[hsl(var(--background))] dark:bg-[#2D2D44] shadow-xl rounded-lg w-full max-h-60 overflow-y-auto z-10 border border-[hsl(var(--foreground)/0.1)] mt-2 animate-fade-in">
           {filteredRecipes.map((recipe) => (

@@ -6,14 +6,14 @@ import { createContext, useContext, useState, ReactNode, useEffect } from 'react
 
 export interface Ingredient {
   name: string;
-  image: StaticImageData | string; // Obsługuje zarówno StaticImageData, jak i string (np. URL)
+  image: StaticImageData | string; 
   richText: string;
 }
 
 interface ShoppingListContextType {
   shoppingList: Record<string, { value: string[]; image: StaticImageData | string }>;
   addToShoppingList: (ingredient: Ingredient) => void;
-  removeFromShoppingList: (name: string) => void; // Usuwanie po nazwie, ponieważ lista jest obiektem
+  removeFromShoppingList: (name: string) => void; 
 }
 
 const ShoppingListContext = createContext<ShoppingListContextType | undefined>(undefined);
@@ -21,7 +21,6 @@ const ShoppingListContext = createContext<ShoppingListContextType | undefined>(u
 export const ShoppingListProvider = ({ children }: { children: ReactNode }) => {
   const [shoppingList, setShoppingList] = useState<Record<string, { value: string[]; image: StaticImageData | string }>>({});
 
-  // Odczyt z Local Storage podczas pierwszego renderowania
   useEffect(() => {
     const storedList = localStorage.getItem('shoppingList');
     if (storedList) {
@@ -29,7 +28,6 @@ export const ShoppingListProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  // Zapis do Local Storage przy każdej zmianie
   useEffect(() => {
     localStorage.setItem('shoppingList', JSON.stringify(shoppingList));
   }, [shoppingList]);
@@ -59,7 +57,7 @@ export const ShoppingListProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const removeFromShoppingList = (name: string) => {
-    const { [name]: _, ...remainingItems } = shoppingList; // Usuwanie składnika po nazwie
+    const { [name]: _, ...remainingItems } = shoppingList; 
     setShoppingList(remainingItems);
   };
 

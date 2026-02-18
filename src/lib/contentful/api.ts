@@ -1,7 +1,5 @@
-// src/lib/contentful/api.ts
-import client from "./contentfulClient";
 
-// Pobiera wszystkie przepisy dla kategorii (lub wszystkie jeśli null)
+import client from "./contentfulClient";
 export async function allRecipes(kind: string | null) {
   try {
     const entry = await client.getEntries({
@@ -23,7 +21,6 @@ export async function allRecipes(kind: string | null) {
   }
 }
 
-// Pobiera jeden przepis po id
 export async function getRecipe(id: string) {
   try {
     const entry = await client.getEntries({
