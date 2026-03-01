@@ -27,14 +27,13 @@ type Recipe = {
 
 export default function Recipes() {
   const params = useSearchParams();
-  const kind = params?.get("kind");
+  const kind = params?.get("kind") ?? undefined;
 
   const [data, setData] = useState<Recipe[] | null>(null);
 
   useEffect(() => {
     async function fetchData() {
-      const rawRecipes = await allRecipes(kind); // zwraca tablicę fields
-
+      const rawRecipes = await allRecipes(kind); 
       if (!rawRecipes || rawRecipes.length === 0) {
         setData([]);
         return;

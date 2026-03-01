@@ -11,15 +11,15 @@ export default function Home() {
 
   useEffect(() => {
     async function fetchRandomRecipes() {
-      const recipes = await allRecipes(null); // pobieramy wszystkie przepisy
+      const recipes = await allRecipes(); 
 
       if (!recipes || recipes.length === 0) return;
 
-      // Losujemy 3 przepisy
+   
+    
       const shuffled = recipes.sort(() => 0.5 - Math.random());
       const selected = shuffled.slice(0, 3);
 
-      // Transformacja na format używany w Home
       const transformed = selected.map((entry: any) => ({
         id: entry.id || entry.fields?.id,
         title: entry.title || entry.fields?.title,

@@ -1,5 +1,3 @@
-import { useState, useEffect } from 'react';
-
 type recipesDataProps = {
   id: number;
   title: string;
@@ -102,13 +100,13 @@ export const recipesData: recipesDataProps[] = [
     ]
   },
   {
-    "id": 4,
+    id: 4,
     "title": "Potato, Bacon and Caramelised Onion Dumplings (Vareniki)",
-    "ingredients": ["flour", "egg", "water", "potatoes", "butter", "bacon", "onion", "salt", "pepper"],
-    "image": "/images/cheeseDumplings.jpg",
-    "time": "1 hour 40 minutes",
-    "difficulty": "Moderate",
-    "ingredientsList": [
+    ingredients: ["flour", "egg", "water", "potatoes", "butter", "bacon", "onion", "salt", "pepper"],
+    image: "/images/cheeseDumplings.jpg",
+    time: "1 hour 40 minutes",
+    difficulty: "Moderate",
+    ingredientsList: [
       { "flour": "450g" },
       { "salt (for dough)": "1 teaspoon and to taste for filling" },
       { "egg": "1, large" },
@@ -119,7 +117,7 @@ export const recipesData: recipesDataProps[] = [
       { "onion": "1, chopped" },
       { "pepper": "To taste" }
     ],
-    "steps": [
+    steps: [
       "Peel and boil the potatoes until fork-tender. While the potatoes are boiling, prepare the dough.",
       "In a food processor, pulse the flour and salt. With the motor running, add the egg and then slowly pour in the cold water until the dough forms. Transfer to a bowl, cover with a tea towel, and let it rest for 30 minutes.",
       "Meanwhile, prepare the filling. Fry the bacon and chop it. Cook the chopped onion in the bacon fat on low heat for 20 minutes until caramelized. Mash the potatoes, then mix them with butter, bacon, and onions. Season with salt and pepper.",

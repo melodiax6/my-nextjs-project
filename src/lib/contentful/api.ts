@@ -1,43 +1,122 @@
-
 import client from "./contentfulClient";
-export async function allRecipes(kind: string | null) {
+
+/* ============================= */
+/* ========= TYPES ============= */
+/* ============================= */
+
+export type ContentfulIngredientRef = {
+  sys: { id: string };
+  fields: {
+    title: string;
+    image?: { fields: { file: { url: string } } };
+  };
+};
+
+export type Recipe = {
+  id: string;
+  title: string;
+  slug?: string;
+  time?: string;
+  difficulty?: string;
+  image?: any;
+  category?: string;
+  ingredients: ContentfulIngredientRef[];
+  ingredientsList?: any; // Rich Text
+  steps?: any;           // Rich Text
+};
+
+export type Ingredient = {
+  id: string;
+  title: string;
+  imageUrl?: string;
+  category?: string;
+};
+
+/* ============================= */
+/* ======== ALL RECIPES ======== */
+/* ============================= */
+export async function allRecipes(kind?: string): Promise<Recipe[]> {
   try {
-    const entry = await client.getEntries({
+    const response = await client.getEntries({
       content_type: "recipe",
+      include: 2, // pobiera referencje
       ...(kind && { "fields.category": kind }),
     });
 
-    if (!entry || !entry.items) {
-      console.warn("No entries returned from Contentful for allRecipes");
-      return [];
-    }
+    if (!response?.items) return [];
 
-    console.log("allRecipes items:", entry.items);
-
-    return entry.items.map((item) => item.fields);
+    return response.items.map((item: any) => ({
+ id: item.fields.id, // 👈 TWOJE PRAWDZIWE ID Z CONTENTFUL
+      title: item.fields.title,
+      slug: item.fields.title?.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, ''),
+      time: item.fields.time,
+      difficulty: item.fields.difficulty,
+      image: item.fields.image,
+      category: item.fields.category,
+      ingredients: item.fields.ingredients || [],
+      ingredientsList: item.fields.ingredientsList || null,
+      steps: item.fields.steps || null,
+    }));
   } catch (error) {
     console.error("Error fetching allRecipes:", error);
     return [];
   }
 }
 
-export async function getRecipe(id: string) {
+/* ============================= */
+/* ========= GET RECIPE ======== */
+/* ============================= */
+export async function getRecipe(id: string): Promise<Recipe | null> {
   try {
-    const entry = await client.getEntries({
+    const response = await client.getEntries({
       content_type: "recipe",
       limit: 1,
+      include: 2,
       "fields.id": id,
     });
 
-    if (!entry || !entry.items || entry.items.length === 0) {
-      console.warn(`Recipe with id "${id}" not found`);
-      return null;
-    }
+    if (!response?.items?.length) return null;
 
-    console.log(`getRecipe id=${id} item:`, entry.items[0]);
-    return entry.items[0].fields;
+    const item: any = response.items[0];
+
+ return {
+  id: item.fields.id, // 🔥 NIE sys.id
+  title: item.fields.title,
+  slug: item.fields.slug,
+  time: item.fields.time,
+  difficulty: item.fields.difficulty,
+  image: item.fields.image,
+  category: item.fields.category,
+  ingredients: item.fields.ingredients || [],
+  ingredientsList: item.fields.ingredientsList || null,
+  steps: item.fields.steps || null,
+};
   } catch (error) {
     console.error(`Error fetching recipe id=${id}:`, error);
     return null;
+  }
+}
+
+/* ============================= */
+/* ===== ALL INGREDIENTS ======= */
+/* ============================= */
+export async function getAllIngredients(): Promise<Ingredient[]> {
+  try {
+    const response = await client.getEntries({
+      content_type: "ingredient",
+      limit: 1000,
+    });
+
+    if (!response?.items) return [];
+
+    return response.items.map((item: any) => ({
+      id: item.sys.id,
+      title: item.fields.title,
+      imageUrl: item.fields.image?.fields?.file?.url ? `https:${item.fields.image.fields.file.url}` : "",
+      category: item.fields.category || 'Other',
+    }));
+  } catch (error) {
+    console.error("Error fetching ingredients:", error);
+    return [];
   }
 }
