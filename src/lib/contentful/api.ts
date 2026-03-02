@@ -80,7 +80,7 @@ export async function getRecipe(id: string): Promise<Recipe | null> {
     const item: any = response.items[0];
 
  return {
-  id: item.fields.id, // 🔥 NIE sys.id
+  id: item.fields.id, 
   title: item.fields.title,
   slug: item.fields.slug,
   time: item.fields.time,

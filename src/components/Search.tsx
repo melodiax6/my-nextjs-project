@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearch } from "../context/SearchContext";
@@ -69,20 +69,26 @@ const Search: React.FC<SearchProps> = ({ onOpenChange }) => {
     fetchData();
   }, []);
 
-  const filteredRecipes = recipes.filter((recipe) =>
-    recipe.title.toLowerCase().includes(searchValue.toLowerCase())
+  // Memoized filteredRecipes
+  const filteredRecipes = useMemo(
+    () =>
+      recipes.filter((recipe) =>
+        recipe.title.toLowerCase().includes(searchValue.toLowerCase())
+      ),
+    [recipes, searchValue]
   );
 
   const iconSrc = isDark ? "/images/search-w.png" : "/images/search-b.png";
 
-  const toggleSearch = (open: boolean) => {
+  // Callback for toggling search state
+  const toggleSearch = useCallback((open: boolean) => {
     setIsSearchOpen(open);
     onOpenChange?.(open);
-  };
+  }, [onOpenChange]);
 
   return (
     <div className="relative flex flex-col items-center">
-      {/* Ikona lupki, gdy pole jest zamknięte */}
+      {/* Search Icon */}
       {!isSearchOpen && (
         <Image
           src={iconSrc}
@@ -94,7 +100,7 @@ const Search: React.FC<SearchProps> = ({ onOpenChange }) => {
         />
       )}
 
-      {/* Pole wyszukiwania */}
+      {/* Search Field */}
       {isSearchOpen && (
         <div className="relative flex items-center bg-[#FBB5A5] dark:bg-[#FFC8C2] p-3 rounded-full h-12 w-full max-w-lg shadow-lg">
           <input
@@ -105,7 +111,7 @@ const Search: React.FC<SearchProps> = ({ onOpenChange }) => {
             className="bg-transparent border-0 outline-none px-3 flex-grow rounded-full font-poppins"
           />
 
-          {/* Lupka w przycisku zamykania */}
+          {/* Close button */}
           <button
             onClick={() => {
               toggleSearch(false);
@@ -114,7 +120,7 @@ const Search: React.FC<SearchProps> = ({ onOpenChange }) => {
             className="ml-2 flex items-center justify-center w-6 h-6 transition-transform duration-200 hover:scale-110 flex-shrink-0"
           >
             <Image
-              src={iconSrc} // ta sama lupka co przy otwieraniu
+              src={iconSrc}
               alt="search-icon"
               width={24}
               height={24}
@@ -123,7 +129,7 @@ const Search: React.FC<SearchProps> = ({ onOpenChange }) => {
         </div>
       )}
 
-      {/* Wyniki wyszukiwania */}
+      {/* Search Results */}
       {isSearchOpen && searchValue && (
         <div className="absolute top-14 bg-[hsl(var(--background))] dark:bg-[#2D2D44] shadow-xl rounded-lg w-full max-h-60 overflow-y-auto z-10 border mt-2">
           {filteredRecipes.map((recipe) => (

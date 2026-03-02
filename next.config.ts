@@ -1,25 +1,22 @@
-import type { NextConfig } from 'next'
- 
-// Next.js 16 - turbopack at the top level of nextConfig
+import type { NextConfig } from 'next';
+
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'images.ctfassets.net',
-        port: '',
-        pathname: '/**',
-        
+        protocol: 'https',  
+        hostname: 'images.ctfassets.net',  
+        port: '',  
+        pathname: '/**', 
       },
       {
         protocol: 'https',
-        hostname: "downloads.ctfassets.net",
+        hostname: 'downloads.ctfassets.net',
         port: '',
         pathname: '/**',
-        
       },
     ],
   },
-}
- 
-export default nextConfig
+};
+
+export default nextConfig;
