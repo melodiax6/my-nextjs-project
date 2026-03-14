@@ -10,6 +10,36 @@ import { useShoppingList } from '@/context/ShoppingListContext';
 import { getRecipe, getAllIngredients } from '@/lib/contentful/api';
 import { getIngredientAIData } from '@/lib/ai/normalize';
 import { HydrationBoundary } from '@/components/HydrationBoundary';
+import CookingMode from '@/components/CookingMode';
+
+function extractStepsFromRichText(stepsRichText: any): string[] {
+  if (!stepsRichText?.content) return [];
+
+  const extractedSteps: string[] = [];
+
+  const getTextFromNode = (node: any): string => {
+    if (node.nodeType === 'text') return node.value || '';
+    if (!node.content) return '';
+    return node.content.map(getTextFromNode).join('');
+  };
+
+  const walk = (nodes: any[]) => {
+    nodes.forEach((node) => {
+      if (node.nodeType === 'list-item') {
+        const text = getTextFromNode(node).trim();
+        if (text) extractedSteps.push(text);
+      }
+
+      if (node.content) {
+        walk(node.content);
+      }
+    });
+  };
+
+  walk(stepsRichText.content);
+
+  return extractedSteps;
+}
 
 type Ingredient = {
   sys: { id: string };
@@ -80,6 +110,8 @@ const Recipe = () => {
   const [ingredientSubstitutes, setIngredientSubstitutes] = useState<IngredientSubstitutesMap>({});
   const [loadingSubstitutesFor, setLoadingSubstitutesFor] = useState<string | null>(null);
   const [missingIngredient, setMissingIngredient] = useState('');
+  const [isCookingModeOpen, setIsCookingModeOpen] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
 
   const { addToShoppingList } = useShoppingList();
 
@@ -134,6 +166,10 @@ const Recipe = () => {
     );
   }, [recipeData, missingIngredient]);
 
+  const recipeSteps = useMemo(() => {
+    return extractStepsFromRichText(recipeData?.steps);
+  }, [recipeData?.steps]);
+
   useEffect(() => {
     if (!matchedMissingIngredients.length) return;
 
@@ -153,11 +189,7 @@ const Recipe = () => {
             : normalizeText(title);
 
           const alternatives = Array.from(
-            new Set(
-              (aiData?.alternatives ?? [])
-                .map((alt) => alt?.trim())
-                .filter(Boolean)
-            )
+            new Set((aiData?.alternatives ?? []).map((alt) => alt?.trim()).filter(Boolean))
           );
 
           setIngredientSubstitutes((prev) => ({
@@ -300,7 +332,8 @@ const Recipe = () => {
                   </h2>
 
                   <p className="mb-4 text-sm leading-6 text-gray-500 dark:text-gray-300">
-                    Type the ingredient you do not have, and we’ll show possible substitutes only for that item.
+                    Type the ingredient you do not have, and we’ll show possible substitutes only
+                    for that item.
                   </p>
 
                   <input
@@ -360,13 +393,29 @@ const Recipe = () => {
                       ) : (
                         <div className="rounded-xl border border-dashed border-gray-300 p-4 dark:border-gray-600">
                           <p className="text-sm text-gray-500 dark:text-gray-300">
-                            This ingredient was not found in the current recipe. Try typing the exact ingredient name from the list above.
+                            This ingredient was not found in the current recipe. Try typing the
+                            exact ingredient name from the list above.
                           </p>
                         </div>
                       )}
                     </div>
                   )}
                 </div>
+
+                {recipeSteps.length > 0 && (
+                  <div className="mt-8 flex justify-center">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCurrentStep(0);
+                        setIsCookingModeOpen(true);
+                      }}
+                      className="rounded-xl bg-black px-6 py-3 font-medium text-white transition hover:opacity-90 dark:bg-white dark:text-black"
+                    >
+                      Start Cooking Mode
+                    </button>
+                  </div>
+                )}
 
                 <h2 className="mt-8 mb-4 border-b-2 border-gray-300 pb-2 font-playfair text-2xl font-semibold text-black dark:border-gray-600 dark:text-white">
                   Detailed Ingredients
@@ -412,6 +461,15 @@ const Recipe = () => {
           </div>
         </div>
       </Row>
+
+      {isCookingModeOpen && (
+        <CookingMode
+          steps={recipeSteps}
+          currentStep={currentStep}
+          onStepChange={setCurrentStep}
+          onClose={() => setIsCookingModeOpen(false)}
+        />
+      )}
     </HydrationBoundary>
   );
 };
