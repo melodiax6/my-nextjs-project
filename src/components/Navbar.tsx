@@ -3,13 +3,13 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Search as SearchIcon, Menu, X } from "lucide-react";
 import Search from "./Search";
 import { ModeToggle } from "./ModeToggle";
+import { Menu, X } from "lucide-react";
 
 const Navbar: React.FC = () => {
+  const [searchOpen, setSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [mobileSearch, setMobileSearch] = useState("");
 
   const pages = [
     { pathname: "recipes", title: "Recipes" },
@@ -23,7 +23,13 @@ const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto py-3 md:py-5">
         <div className="flex items-center justify-between gap-3">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 min-w-0">
+          <Link
+            href="/"
+            className={`
+              items-center gap-2.5 min-w-0 transition-all duration-300
+              ${searchOpen ? "hidden sm:flex" : "flex"}
+            `}
+          >
             <Image
               src="/images/dumplings2.jpg"
               width={500}
@@ -59,11 +65,13 @@ const Navbar: React.FC = () => {
           </div>
 
           {/* Right side */}
-          <div className="flex items-center gap-2 flex-shrink-0">
-            {/* Desktop/tablet Search */}
-            <div className="hidden sm:block">
-              <Search onOpenChange={() => {}} />
-            </div>
+          <div
+            className={`
+              flex items-center gap-2 flex-shrink-0
+              ${searchOpen ? "w-full sm:w-auto justify-end" : ""}
+            `}
+          >
+            <Search onOpenChange={(open: boolean) => setSearchOpen(open)} />
 
             <ModeToggle />
 
@@ -76,21 +84,6 @@ const Navbar: React.FC = () => {
             >
               {menuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
-          </div>
-        </div>
-
-        {/* Mobile Search - zawsze rozwinięty */}
-        <div className="sm:hidden mt-3">
-          <div className="w-full flex items-center gap-2 rounded-full border border-[hsl(var(--foreground)/0.2)] bg-[hsl(var(--background))] px-4 py-2">
-            <SearchIcon size={18} className="opacity-60 flex-shrink-0" />
-
-            <input
-              type="search"
-              value={mobileSearch}
-              onChange={(e) => setMobileSearch(e.target.value)}
-              placeholder="Search recipes..."
-              className="w-full bg-transparent outline-none text-sm font-poppins placeholder:opacity-60"
-            />
           </div>
         </div>
 
@@ -129,6 +122,7 @@ const Navbar: React.FC = () => {
 };
 
 export default Navbar;
+
 
 
 
