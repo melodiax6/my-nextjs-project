@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo, useCallback } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useSearch } from "../context/SearchContext";
 import { allRecipes } from "@/lib/contentful/api";
 
@@ -31,6 +31,7 @@ type SearchProps = {
 };
 
 const Search: React.FC<SearchProps> = ({ onOpenChange }) => {
+  const router = useRouter();
   const { searchValue, setSearchValue } = useSearch();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
@@ -69,7 +70,6 @@ const Search: React.FC<SearchProps> = ({ onOpenChange }) => {
     fetchData();
   }, []);
 
-  // Memoized filteredRecipes
   const filteredRecipes = useMemo(
     () =>
       recipes.filter((recipe) =>
@@ -80,15 +80,26 @@ const Search: React.FC<SearchProps> = ({ onOpenChange }) => {
 
   const iconSrc = isDark ? "/images/search-w.png" : "/images/search-b.png";
 
-  // Callback for toggling search state
-  const toggleSearch = useCallback((open: boolean) => {
-    setIsSearchOpen(open);
-    onOpenChange?.(open);
-  }, [onOpenChange]);
+  const toggleSearch = useCallback(
+    (open: boolean) => {
+      setIsSearchOpen(open);
+      onOpenChange?.(open);
+    },
+    [onOpenChange]
+  );
+
+  const closeSearch = () => {
+    toggleSearch(false);
+    setSearchValue("");
+  };
+
+  const handleRecipeClick = (id: string) => {
+    router.push(`/recipes/${id}`);
+    closeSearch();
+  };
 
   return (
     <div className="relative flex flex-col items-center">
-      {/* Search Icon */}
       {!isSearchOpen && (
         <Image
           src={iconSrc}
@@ -100,7 +111,6 @@ const Search: React.FC<SearchProps> = ({ onOpenChange }) => {
         />
       )}
 
-      {/* Search Field */}
       {isSearchOpen && (
         <div className="relative flex items-center bg-[#FBB5A5] dark:bg-[#FFC8C2] p-3 rounded-full h-12 w-full max-w-lg shadow-lg">
           <input
@@ -111,38 +121,33 @@ const Search: React.FC<SearchProps> = ({ onOpenChange }) => {
             className="bg-transparent border-0 outline-none px-3 flex-grow rounded-full font-poppins"
           />
 
-          {/* Close button */}
           <button
-            onClick={() => {
-              toggleSearch(false);
-              setSearchValue("");
-            }}
+            type="button"
+            onClick={closeSearch}
             className="ml-2 flex items-center justify-center w-6 h-6 transition-transform duration-200 hover:scale-110 flex-shrink-0"
           >
-            <Image
-              src={iconSrc}
-              alt="search-icon"
-              width={24}
-              height={24}
-            />
+            <Image src={iconSrc} alt="search-icon" width={24} height={24} />
           </button>
         </div>
       )}
 
-      {/* Search Results */}
       {isSearchOpen && searchValue && (
-        <div className="absolute top-14 bg-[hsl(var(--background))] dark:bg-[#2D2D44] shadow-xl rounded-lg w-full max-h-60 overflow-y-auto z-10 border mt-2">
+        <div className="absolute top-14 bg-[hsl(var(--background))] dark:bg-[#2D2D44] shadow-xl rounded-lg w-full max-h-60 overflow-y-auto z-50 border mt-2">
           {filteredRecipes.map((recipe) => (
-            <Link key={recipe.id} href={`/recipes/${recipe.id}`}>
-              <div className="p-4 hover:bg-[#FBB5A5] dark:hover:bg-[#FFC8C2] cursor-pointer flex flex-col rounded-lg transition-all duration-200">
-                <span className="font-semibold text-base font-poppins">
-                  {recipe.title}
-                </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400 font-poppins">
-                  {recipe.time}
-                </span>
-              </div>
-            </Link>
+            <button
+              key={recipe.id}
+              type="button"
+              onClick={() => handleRecipeClick(recipe.id)}
+              className="w-full text-left p-4 hover:bg-[#FBB5A5] dark:hover:bg-[#FFC8C2] cursor-pointer flex flex-col rounded-lg transition-all duration-200"
+            >
+              <span className="font-semibold text-base font-poppins">
+                {recipe.title}
+              </span>
+
+              <span className="text-sm text-gray-500 dark:text-gray-400 font-poppins">
+                {recipe.time}
+              </span>
+            </button>
           ))}
 
           {filteredRecipes.length === 0 && (
