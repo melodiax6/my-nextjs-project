@@ -52,13 +52,13 @@ export default function CookingMode({
           />
         </div>
 
-        <div className="flex flex-1 items-center justify-center">
-          <div className="w-full rounded-3xl border p-8 shadow-sm md:p-12">
-            <p className="text-center text-2xl font-semibold leading-relaxed md:text-4xl">
-              {steps[currentStep]}
-            </p>
-          </div>
-        </div>
+    <div className="flex flex-1 overflow-y-auto py-4">
+  <div className="mx-auto w-full max-w-3xl rounded-3xl border p-8 shadow-sm md:p-12">
+    <p className="text-left text-xl font-semibold leading-relaxed md:text-3xl">
+      {steps[currentStep]}
+    </p>
+  </div>
+</div>
 
         <div className="mt-8 flex items-center justify-center gap-4">
           <button
