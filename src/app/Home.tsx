@@ -39,66 +39,72 @@ export default function Home() {
   return (
     <div className="bg-[hsl(var(--background))] text-[hsl(var(--foreground))]">
 
-      {/* HERO SECTION */}
-      <section className="relative">
-        <Image
-          src="/images/option8.jpg"
-          alt="Delicious Dumplings"
-          fill
-          className="object-cover opacity-75"
-        />
+{/* HERO SECTION */}
+<section className="relative min-h-[520px] sm:min-h-[620px] lg:min-h-[640px] overflow-hidden">
+  <Image
+    src="/images/option8.jpg"
+    alt="Delicious Dumplings"
+    fill
+    priority
+    className="object-cover opacity-75"
+  />
 
-        <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent dark:block hidden"></div>
+  <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black/40 dark:block"></div>
 
-        <div className="relative max-w-7xl mx-auto py-24 sm:py-32 lg:py-40 px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-playfair font-bold drop-shadow-lg dark:drop-shadow-none leading-tight">
-            Explore the World of Dumplings
-          </h1>
+  <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-28 lg:pt-36 pb-44 sm:pb-52 lg:pb-0">
+    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-playfair font-bold drop-shadow-lg leading-tight text-white max-w-4xl">
+      Explore the World of Dumplings
+    </h1>
 
-          <p className="mt-4 text-base sm:text-lg md:text-xl font-poppins opacity-80 max-w-3xl">
-            A variety of dumplings from around the globe for you to try at home.
-          </p>
-        </div>
-<div className="
-  relative 
-  mt-10 
-  mx-auto
-  w-full max-w-md
-  bg-[hsl(var(--background))] 
-  shadow-lg 
-  rounded-2xl 
-  p-6 
-  border border-[hsl(var(--foreground)/0.1)]
+    <p className="mt-4 text-base sm:text-lg md:text-xl font-poppins text-white/85 max-w-3xl">
+      A variety of dumplings from around the globe for you to try at home.
+    </p>
+  </div>
 
- xl:absolute xl:top-20 xl:right-12
-xl:w-72 xl:h-72 xl:rounded-full 
-xl:flex xl:items-center xl:justify-center xl:text-center xl:p-4
+  {/* ABOUT US CARD */}
+  <div
+    className="
+      absolute z-20
+      left-4 right-4 bottom-6
+      mx-auto max-w-sm
 
-">
+      bg-[hsl(var(--background)/0.92)]
+      backdrop-blur-md
+      shadow-xl
+      rounded-2xl
+      p-4
+      border border-[hsl(var(--foreground)/0.12)]
 
-          <div>
-            <h2 className="text-lg sm:text-xl md:text-2xl font-playfair font-semibold">
-              About Us
-            </h2>
+      sm:left-auto sm:right-6 sm:bottom-8 sm:w-80 sm:p-5
 
-            <p className="mt-2 text-sm sm:text-base font-poppins opacity-70">
-              Discover traditional and modern dumpling recipes you&apos;ll love,
-              with step-by-step guidance for beginners and experts alike.
-            </p>
+      xl:top-24 xl:right-12 xl:bottom-auto
+      xl:w-72 xl:h-72 xl:rounded-full
+      xl:flex xl:items-center xl:justify-center xl:text-center xl:p-5
+    "
+  >
+    <div>
+      <h2 className="text-lg sm:text-xl md:text-2xl font-playfair font-semibold">
+        About Us
+      </h2>
 
-            <p className="mt-2 text-sm sm:text-base font-poppins opacity-70">
-              We offer a variety of recipes, from sweet to savory, simple to
-              sophisticated.
-            </p>
+      <p className="mt-2 text-sm sm:text-base font-poppins opacity-70">
+        Discover traditional and modern dumpling recipes you&apos;ll love,
+        with step-by-step guidance.
+      </p>
 
-            <Link href="/about">
-              <button className="mt-4 px-3 py-1 text-sm sm:text-base font-poppins rounded-full border border-[hsl(var(--foreground))] hover:opacity-70 transition">
-                Learn more
-              </button>
-            </Link>
-          </div>
-        </div>
-      </section>
+      <p className="mt-2 hidden sm:block text-sm sm:text-base font-poppins opacity-70">
+        We offer a variety of recipes, from sweet to savory, simple to
+        sophisticated.
+      </p>
+
+      <Link href="/about">
+        <button className="mt-4 px-4 py-2 text-sm sm:text-base font-poppins rounded-full border border-[hsl(var(--foreground))] hover:opacity-70 transition">
+          Learn more
+        </button>
+      </Link>
+    </div>
+  </div>
+</section>
 
       {/* CATEGORIES */}
       <section className="py-12 text-center px-4 sm:px-6 lg:px-8">
