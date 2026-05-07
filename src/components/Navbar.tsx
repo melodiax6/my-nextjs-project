@@ -3,13 +3,13 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { Search as SearchIcon, Menu, X } from "lucide-react";
 import Search from "./Search";
 import { ModeToggle } from "./ModeToggle";
-import { Menu, X } from "lucide-react";
 
 const Navbar: React.FC = () => {
-  const [searchOpen, setSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [mobileSearch, setMobileSearch] = useState("");
 
   const pages = [
     { pathname: "recipes", title: "Recipes" },
@@ -31,6 +31,7 @@ const Navbar: React.FC = () => {
               alt="logo"
               className="w-12 h-12 sm:w-16 sm:h-16 md:w-24 md:h-24 rounded-full object-cover flex-shrink-0"
             />
+
             <span className="text-2xl sm:text-3xl font-playfair font-bold hover:opacity-70 transition-opacity duration-300 whitespace-nowrap">
               DumplinGo
             </span>
@@ -59,7 +60,11 @@ const Navbar: React.FC = () => {
 
           {/* Right side */}
           <div className="flex items-center gap-2 flex-shrink-0">
-            <Search onOpenChange={(open: boolean) => setSearchOpen(open)} />
+            {/* Desktop/tablet Search */}
+            <div className="hidden sm:block">
+              <Search onOpenChange={() => {}} />
+            </div>
+
             <ModeToggle />
 
             <button
@@ -71,6 +76,21 @@ const Navbar: React.FC = () => {
             >
               {menuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
+          </div>
+        </div>
+
+        {/* Mobile Search - zawsze rozwinięty */}
+        <div className="sm:hidden mt-3">
+          <div className="w-full flex items-center gap-2 rounded-full border border-[hsl(var(--foreground)/0.2)] bg-[hsl(var(--background))] px-4 py-2">
+            <SearchIcon size={18} className="opacity-60 flex-shrink-0" />
+
+            <input
+              type="search"
+              value={mobileSearch}
+              onChange={(e) => setMobileSearch(e.target.value)}
+              placeholder="Search recipes..."
+              className="w-full bg-transparent outline-none text-sm font-poppins placeholder:opacity-60"
+            />
           </div>
         </div>
 
@@ -109,7 +129,6 @@ const Navbar: React.FC = () => {
 };
 
 export default Navbar;
-
 
 
 
