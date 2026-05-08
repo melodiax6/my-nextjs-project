@@ -1,6 +1,12 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from "react";
+import {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  useRef,
+} from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useSearch } from "../context/SearchContext";
@@ -33,9 +39,25 @@ type SearchProps = {
 const Search: React.FC<SearchProps> = ({ onOpenChange }) => {
   const router = useRouter();
   const { searchValue, setSearchValue } = useSearch();
+
+  const searchRef = useRef<HTMLDivElement | null>(null);
+
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
+
+  const toggleSearch = useCallback(
+    (open: boolean) => {
+      setIsSearchOpen(open);
+      onOpenChange?.(open);
+    },
+    [onOpenChange]
+  );
+
+  const closeSearch = useCallback(() => {
+    toggleSearch(false);
+    setSearchValue("");
+  }, [toggleSearch, setSearchValue]);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -70,6 +92,25 @@ const Search: React.FC<SearchProps> = ({ onOpenChange }) => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (!isSearchOpen) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
+        closeSearch();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isSearchOpen, closeSearch]);
+
   const filteredRecipes = useMemo(
     () =>
       recipes.filter((recipe) =>
@@ -80,26 +121,13 @@ const Search: React.FC<SearchProps> = ({ onOpenChange }) => {
 
   const iconSrc = isDark ? "/images/search-w.png" : "/images/search-b.png";
 
-  const toggleSearch = useCallback(
-    (open: boolean) => {
-      setIsSearchOpen(open);
-      onOpenChange?.(open);
-    },
-    [onOpenChange]
-  );
-
-  const closeSearch = () => {
-    toggleSearch(false);
-    setSearchValue("");
-  };
-
   const handleRecipeClick = (id: string) => {
     router.push(`/recipes/${id}`);
     closeSearch();
   };
 
   return (
-    <div className="relative flex flex-col items-center">
+    <div ref={searchRef} className="relative flex flex-col items-center">
       {!isSearchOpen && (
         <Image
           src={iconSrc}
@@ -119,44 +147,46 @@ const Search: React.FC<SearchProps> = ({ onOpenChange }) => {
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
             className="bg-transparent border-0 outline-none px-3 flex-grow rounded-full font-poppins"
+            autoFocus
           />
 
           <button
             type="button"
             onClick={closeSearch}
             className="ml-2 flex items-center justify-center w-6 h-6 transition-transform duration-200 hover:scale-110 flex-shrink-0"
+            aria-label="Close search"
           >
             <Image src={iconSrc} alt="search-icon" width={24} height={24} />
           </button>
         </div>
       )}
 
-{isSearchOpen && searchValue && (
-  <div className="absolute top-14 left-0 right-0 bg-[hsl(var(--background))] dark:bg-[#2D2D44] shadow-2xl rounded-lg w-full max-h-60 overflow-y-auto z-[9999] border border-[hsl(var(--foreground)/0.15)] mt-2">
-    {filteredRecipes.map((recipe) => (
-      <button
-        key={recipe.id}
-        type="button"
-        onClick={() => handleRecipeClick(recipe.id)}
-        className="w-full text-left p-4 bg-[hsl(var(--background))] dark:bg-[#2D2D44] hover:bg-[#FBB5A5] dark:hover:bg-[#FFC8C2] cursor-pointer flex flex-col rounded-lg transition-all duration-200"
-      >
-        <span className="font-semibold text-base font-poppins">
-          {recipe.title}
-        </span>
+      {isSearchOpen && searchValue && (
+        <div className="absolute top-14 left-0 right-0 bg-[hsl(var(--background))] dark:bg-[#2D2D44] shadow-2xl rounded-lg w-full max-h-60 overflow-y-auto z-[9999] border border-[hsl(var(--foreground)/0.15)] mt-2">
+          {filteredRecipes.map((recipe) => (
+            <button
+              key={recipe.id}
+              type="button"
+              onClick={() => handleRecipeClick(recipe.id)}
+              className="w-full text-left p-4 bg-[hsl(var(--background))] dark:bg-[#2D2D44] hover:bg-[#FBB5A5] dark:hover:bg-[#FFC8C2] cursor-pointer flex flex-col rounded-lg transition-all duration-200"
+            >
+              <span className="font-semibold text-base font-poppins">
+                {recipe.title}
+              </span>
 
-        <span className="text-sm text-gray-500 dark:text-gray-400 font-poppins">
-          {recipe.time}
-        </span>
-      </button>
-    ))}
+              <span className="text-sm text-gray-500 dark:text-gray-400 font-poppins">
+                {recipe.time}
+              </span>
+            </button>
+          ))}
 
-    {filteredRecipes.length === 0 && (
-      <div className="p-4 text-center bg-[hsl(var(--background))] dark:bg-[#2D2D44] text-gray-500 dark:text-gray-400 font-poppins">
-        No results found
-      </div>
-    )}
-  </div>
-)}
+          {filteredRecipes.length === 0 && (
+            <div className="p-4 text-center bg-[hsl(var(--background))] dark:bg-[#2D2D44] text-gray-500 dark:text-gray-400 font-poppins">
+              No results found
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
