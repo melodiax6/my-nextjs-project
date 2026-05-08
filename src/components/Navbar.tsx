@@ -19,26 +19,35 @@ const Navbar: React.FC = () => {
   ];
 
   return (
-    <nav className="w-full bg-[hsl(var(--background))] text-[hsl(var(--foreground))] border-b border-[hsl(var(--foreground)/0.1)] transition-colors duration-300 px-4 sm:px-6 lg:px-10">
+    <nav className="w-full bg-[hsl(var(--background))] text-[hsl(var(--foreground))] border-b border-[hsl(var(--foreground)/0.1)] transition-colors duration-300 px-2 sm:px-6 lg:px-10">
       <div className="max-w-7xl mx-auto py-3 md:py-5">
-        <div className="flex items-center justify-between gap-3">
+        <div
+          className={`
+            items-center gap-1 sm:gap-3
+            ${
+              searchOpen
+                ? "grid grid-cols-[44px_minmax(0,1fr)] sm:flex sm:justify-between"
+                : "flex justify-between"
+            }
+          `}
+        >
           {/* Logo */}
-          <Link
-            href="/"
-            className={`
-              items-center gap-2.5 min-w-0 transition-all duration-300
-              ${searchOpen ? "hidden sm:flex" : "flex"}
-            `}
-          >
+          <Link href="/" className="flex items-center gap-2 min-w-0 flex-shrink-0">
             <Image
               src="/images/dumplings2.jpg"
               width={500}
               height={800}
               alt="logo"
-              className="w-12 h-12 sm:w-16 sm:h-16 md:w-24 md:h-24 rounded-full object-cover flex-shrink-0"
+              className="w-10 h-10 sm:w-16 sm:h-16 md:w-24 md:h-24 rounded-full object-cover flex-shrink-0"
             />
 
-            <span className="text-2xl sm:text-3xl font-playfair font-bold hover:opacity-70 transition-opacity duration-300 whitespace-nowrap">
+            <span
+              className={`
+                text-2xl sm:text-3xl font-playfair font-bold
+                hover:opacity-70 transition-all duration-300 whitespace-nowrap
+                ${searchOpen ? "hidden sm:block" : "block"}
+              `}
+            >
               DumplinGo
             </span>
           </Link>
@@ -67,18 +76,28 @@ const Navbar: React.FC = () => {
           {/* Right side */}
           <div
             className={`
-              flex items-center gap-2 flex-shrink-0
-              ${searchOpen ? "w-full sm:w-auto justify-end" : ""}
+              flex items-center gap-1 min-w-0
+              ${searchOpen ? "w-full" : "flex-shrink-0"}
             `}
           >
-            <Search onOpenChange={(open: boolean) => setSearchOpen(open)} />
+            <div className={`${searchOpen ? "flex-1 min-w-0" : "w-auto"}`}>
+              <Search onOpenChange={(open: boolean) => setSearchOpen(open)} />
+            </div>
 
-            <ModeToggle />
+            <div className="flex-shrink-0">
+              <ModeToggle />
+            </div>
 
             <button
               type="button"
               onClick={() => setMenuOpen((prev) => !prev)}
-              className="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-full border border-[hsl(var(--foreground)/0.2)] hover:bg-[hsl(var(--foreground)/0.06)] transition"
+              className="
+                lg:hidden inline-flex items-center justify-center
+                w-10 h-10 rounded-full
+                border border-[hsl(var(--foreground)/0.2)]
+                hover:bg-[hsl(var(--foreground)/0.06)]
+                transition flex-shrink-0
+              "
               aria-label="Toggle menu"
               aria-expanded={menuOpen}
             >
@@ -122,7 +141,4 @@ const Navbar: React.FC = () => {
 };
 
 export default Navbar;
-
-
-
 

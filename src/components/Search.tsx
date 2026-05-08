@@ -131,32 +131,32 @@ const Search: React.FC<SearchProps> = ({ onOpenChange }) => {
         </div>
       )}
 
-      {isSearchOpen && searchValue && (
-        <div className="absolute top-14 bg-[hsl(var(--background))] dark:bg-[#2D2D44] shadow-xl rounded-lg w-full max-h-60 overflow-y-auto z-50 border mt-2">
-          {filteredRecipes.map((recipe) => (
-            <button
-              key={recipe.id}
-              type="button"
-              onClick={() => handleRecipeClick(recipe.id)}
-              className="w-full text-left p-4 hover:bg-[#FBB5A5] dark:hover:bg-[#FFC8C2] cursor-pointer flex flex-col rounded-lg transition-all duration-200"
-            >
-              <span className="font-semibold text-base font-poppins">
-                {recipe.title}
-              </span>
+{isSearchOpen && searchValue && (
+  <div className="absolute top-14 left-0 right-0 bg-[hsl(var(--background))] dark:bg-[#2D2D44] shadow-2xl rounded-lg w-full max-h-60 overflow-y-auto z-[9999] border border-[hsl(var(--foreground)/0.15)] mt-2">
+    {filteredRecipes.map((recipe) => (
+      <button
+        key={recipe.id}
+        type="button"
+        onClick={() => handleRecipeClick(recipe.id)}
+        className="w-full text-left p-4 bg-[hsl(var(--background))] dark:bg-[#2D2D44] hover:bg-[#FBB5A5] dark:hover:bg-[#FFC8C2] cursor-pointer flex flex-col rounded-lg transition-all duration-200"
+      >
+        <span className="font-semibold text-base font-poppins">
+          {recipe.title}
+        </span>
 
-              <span className="text-sm text-gray-500 dark:text-gray-400 font-poppins">
-                {recipe.time}
-              </span>
-            </button>
-          ))}
+        <span className="text-sm text-gray-500 dark:text-gray-400 font-poppins">
+          {recipe.time}
+        </span>
+      </button>
+    ))}
 
-          {filteredRecipes.length === 0 && (
-            <div className="p-4 text-center text-gray-500 dark:text-gray-400 font-poppins">
-              No results found
-            </div>
-          )}
-        </div>
-      )}
+    {filteredRecipes.length === 0 && (
+      <div className="p-4 text-center bg-[hsl(var(--background))] dark:bg-[#2D2D44] text-gray-500 dark:text-gray-400 font-poppins">
+        No results found
+      </div>
+    )}
+  </div>
+)}
     </div>
   );
 };
