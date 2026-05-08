@@ -12,20 +12,31 @@ type ThemeContextType = {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("light");
+  const [theme, setThemeState] = useState<Theme>("light");
 
   useEffect(() => {
     const saved = localStorage.getItem("theme");
 
-    if (saved === "light" || saved === "dark") {
-      setTheme(saved);
+    if (saved === "dark") {
+      setThemeState("dark");
+      document.documentElement.classList.add("dark");
+    } else {
+      setThemeState("light");
+      localStorage.setItem("theme", "light");
+      document.documentElement.classList.remove("dark");
     }
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem("theme", theme);
-    document.documentElement.classList.toggle("dark", theme === "dark");
-  }, [theme]);
+  const setTheme = (t: Theme) => {
+    setThemeState(t);
+    localStorage.setItem("theme", t);
+
+    if (t === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  };
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
