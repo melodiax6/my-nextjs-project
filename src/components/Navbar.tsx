@@ -15,6 +15,7 @@ const Navbar: React.FC = () => {
 
   const pages = [
     { pathname: "recipes", title: "Recipes" },
+    { pathname: "dashboard", title: "Dashboard" },
     { pathname: "saved-recipes", title: "Saved Recipes" },
     { pathname: "about", title: "About" },
     { pathname: "shopping-list", title: "Shopping List" },
