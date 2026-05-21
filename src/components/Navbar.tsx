@@ -1,22 +1,51 @@
-'use client';
+"use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Search from "./Search";
 import { ModeToggle } from "./ModeToggle";
 import { Menu, X } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
 
 const Navbar: React.FC = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
 
   const pages = [
     { pathname: "recipes", title: "Recipes" },
+    { pathname: "saved-recipes", title: "Saved Recipes" },
     { pathname: "about", title: "About" },
     { pathname: "shopping-list", title: "Shopping List" },
     { pathname: "cookmaster", title: "Cook With What You Have", special: true },
   ];
+
+  useEffect(() => {
+    const getUser = async () => {
+      const supabase = createClient();
+
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      console.log("SUPABASE USER:", user);
+      setUser(user);
+    };
+
+    getUser();
+  }, []);
+
+  const handleLogout = async () => {
+    const supabase = createClient();
+
+    await supabase.auth.signOut();
+
+    setUser(null);
+    setMenuOpen(false);
+
+    window.location.reload();
+  };
 
   return (
     <nav className="w-full bg-[hsl(var(--background))] text-[hsl(var(--foreground))] border-b border-[hsl(var(--foreground)/0.1)] transition-colors duration-300 px-2 sm:px-6 lg:px-10">
@@ -31,8 +60,10 @@ const Navbar: React.FC = () => {
             }
           `}
         >
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 min-w-0 flex-shrink-0">
+          <Link
+            href="/"
+            className="flex items-center gap-2 min-w-0 flex-shrink-0"
+          >
             <Image
               src="/images/dumplings2.jpg"
               width={500}
@@ -52,7 +83,6 @@ const Navbar: React.FC = () => {
             </span>
           </Link>
 
-          {/* Desktop nav */}
           <div className="hidden lg:flex items-center justify-center gap-3 flex-1">
             {pages.map((page) => (
               <Link
@@ -73,7 +103,6 @@ const Navbar: React.FC = () => {
             ))}
           </div>
 
-          {/* Right side */}
           <div
             className={`
               flex items-center gap-1 min-w-0
@@ -87,6 +116,37 @@ const Navbar: React.FC = () => {
             <div className="flex-shrink-0">
               <ModeToggle />
             </div>
+
+            {user ? (
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="
+                  hidden sm:flex items-center justify-center
+                  h-10 px-4 rounded-full
+                  border border-[hsl(var(--foreground)/0.2)]
+                  hover:bg-[hsl(var(--foreground)/0.06)]
+                  transition text-sm font-medium
+                  whitespace-nowrap flex-shrink-0
+                "
+              >
+                Logout
+              </button>
+            ) : (
+              <Link
+                href="/login"
+                className="
+                  hidden sm:flex items-center justify-center
+                  h-10 px-4 rounded-full
+                  border border-[hsl(var(--foreground)/0.2)]
+                  hover:bg-[hsl(var(--foreground)/0.06)]
+                  transition text-sm font-medium
+                  whitespace-nowrap flex-shrink-0
+                "
+              >
+                Login
+              </Link>
+            )}
 
             <button
               type="button"
@@ -106,11 +166,10 @@ const Navbar: React.FC = () => {
           </div>
         </div>
 
-        {/* Mobile menu */}
         <div
           className={`
             lg:hidden overflow-hidden transition-all duration-300
-            ${menuOpen ? "max-h-96 opacity-100 mt-4" : "max-h-0 opacity-0"}
+            ${menuOpen ? "max-h-[500px] opacity-100 mt-4" : "max-h-0 opacity-0"}
           `}
         >
           <div className="grid gap-2 pb-3">
@@ -133,6 +192,36 @@ const Navbar: React.FC = () => {
                 {page.title}
               </Link>
             ))}
+
+            {user ? (
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="
+                  w-full flex items-center justify-center min-h-11 px-4 py-2
+                  border rounded-2xl text-sm sm:text-base font-poppins font-light
+                  border-[hsl(var(--foreground)/0.2)]
+                  hover:bg-[hsl(var(--foreground)/0.06)]
+                  transition
+                "
+              >
+                Logout
+              </button>
+            ) : (
+              <Link
+                href="/login"
+                onClick={() => setMenuOpen(false)}
+                className="
+                  w-full flex items-center justify-center min-h-11 px-4 py-2
+                  border rounded-2xl text-sm sm:text-base font-poppins font-light
+                  border-[hsl(var(--foreground)/0.2)]
+                  hover:bg-[hsl(var(--foreground)/0.06)]
+                  transition text-center
+                "
+              >
+                Login
+              </Link>
+            )}
           </div>
         </div>
       </div>

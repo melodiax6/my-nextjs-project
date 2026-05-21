@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { allRecipes } from '@/lib/contentful/api';
 import { useSearchParams } from 'next/navigation';
 
+
 type RecipeFields = {
   id: string;
   title: string;

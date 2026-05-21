@@ -11,6 +11,7 @@ import { getRecipe, getAllIngredients } from '@/lib/contentful/api';
 import { getIngredientAIData } from '@/lib/ai/normalize';
 import { HydrationBoundary } from '@/components/HydrationBoundary';
 import CookingMode from '@/components/CookingMode';
+import SaveRecipeButton from "@/components/SaveRecipeButton";
 
 function extractStepsFromRichText(stepsRichText: any): string[] {
   if (!stepsRichText?.content) return [];
@@ -263,9 +264,13 @@ const Recipe = () => {
               </div>
 
               <div className="flex-1 p-6">
-                <h1 className="mb-2 text-center font-playfair text-4xl font-extrabold uppercase text-black dark:text-white">
-                  {title}
-                </h1>
+            <h1 className="mb-2 text-center font-playfair text-4xl font-extrabold uppercase text-black dark:text-white">
+  {title}
+</h1>
+
+<div className="mt-4 flex justify-center">
+  <SaveRecipeButton recipeId={recipeId} />
+</div>
 
                 <div className="mt-4 mb-8 flex justify-center space-x-8 text-lg text-black dark:text-white">
                   <div className="flex items-center space-x-2">
